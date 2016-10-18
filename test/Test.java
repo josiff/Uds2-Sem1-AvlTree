@@ -22,6 +22,7 @@ public class Test {
 
     private AvlTree tree;
     private ArrayList<Integer> items;
+    private int pocet;
 
     private Random rnd;
 
@@ -29,77 +30,92 @@ public class Test {
         this.tree = new AvlTree();
         this.items = new ArrayList<>();
         this.rnd = new Random();
+        pocet = 0;
 
     }
 
     public void testuj() {
 
-        for (int i = 0; i < 10; i++) {
-            insert(i);
+         for (int i = 0; i < 10000; i++) {            
+         insert();
 
-        }
-        vypis();
-        for (int i = 0; i < 10; i++) {
-            remove(i);
-        }
+         }
+         vypis();
+
+         for (int i = 0; i < 8000; i++) {            
+         remove();
+         }
         
-       
-        
-        
-        
-        System.out.println("----------Vys--------------");
-        System.out.println(tree.getCount());
-        vypis();
+         vypis();
+         
         
 
     }
 
     private void insert() {
         int value = rnd.nextInt();
-        
+        //System.out.println("insert(" + value + ");");
+        insert(value);
 
     }
-    
-    private void insert(int value){
+
+    private void insert(int value) {
         Cislo cis = new Cislo(value);
-        tree.insert(cis);
-        items.add(value);
-    
+        if (tree.insert(cis)) {
+            pocet++;
+            items.add(value);
+        }
+
     }
 
     private void remove() {
 
-        int i = items.get(rnd.nextInt(items.size()));
-        
+        //Cislo cis = items.get(rnd.nextInt(items.size()));
+        Cislo cis = new Cislo(items.get(rnd.nextInt(pocet)));
+        //System.out.println("remove(" + cis.getKey() + ");");
+        remove(cis);
 
     }
-    
-     private void remove(int value) {
 
-       if (tree.remove(new Cislo(value))) {
-           // items.remove(value);
+    private void remove(int value) {
+        Cislo cis = new Cislo(value);
+        remove(cis);
+
+    }
+
+    private void remove(Cislo cis) {
+
+        if (tree.remove(cis)) {
+            pocet--;
+            // items.remove(cis.getKey());
+
         } else {
-           Exception exception = new Exception("Chyba mazania test");
-           exception.printStackTrace();
+
+            /*Exception exception = new Exception("Chyba mazania test");
+             exception.printStackTrace();*/
         }
 
     }
 
     public void vypis() {
 
-       /* Collections.sort(items);
-        String result = "";
-        for (int i : items) {
-            result += String.valueOf(i) + ", ";
+        System.out.println("----------Vys--------------");
+        System.out.println("Strom pocet:" + tree.getCount());
+        //System.out.println("List pocet:" + items.size());
+        System.out.println("Test pocet:" + pocet);
 
-        }*/
+        /* Collections.sort(items);
+         String result = "";
+         for (int i : items) {
+         result += String.valueOf(i) + ", ";
 
+         }*/
         writeTree(tree.getRoot());
         //System.out.println("\n"+result);
 //        System.out.println((tr.checkNext() ? "Spravne " : "Nespravne ") + "rozlozenie prvkov");
-      
-        //System.out.println(tr.prechodPre(tr.getRoot()));
 
+        //System.out.println(tr.prechodPre(tr.getRoot()));
+        System.out.println("---------------------");
     }
 
     /**
@@ -111,7 +127,7 @@ public class Test {
         if (root == null) {
             return;
         }
-        
+
         int count = 0;
 
         Stack<Node> stack = new Stack<Node>();
@@ -124,13 +140,13 @@ public class Test {
             } else {
                 Node n = stack.pop();
                 count++;
-                System.out.printf("%s, %n", n.toString());
+               // System.out.printf("%s, %n", n.toString());
                 root = n.getRight();
             }
 
         }
-        
-        System.out.println(count);
+
+        System.out.println("Inorder pocet:" + count);
 
     }
 

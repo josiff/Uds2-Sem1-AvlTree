@@ -7,6 +7,7 @@ package avltree;
 
 import java.util.Hashtable;
 import java.util.Stack;
+import test.Cislo;
 
 /**
  *
@@ -17,17 +18,25 @@ public class AvlTree {
     private Node root;
     private int count;
 
-    public void insert(Node paNode) {
+    public boolean insert(Node paNode) {
         boolean flag = false;
+        boolean result = true;
         if (root == null) {
             root = paNode;
             flag = true;
         }
         Node node = root;
 
-        while (flag == false) {
+        int cis = 0;
 
-            if (paNode.compare(node) > 0) {
+        while (flag == false) {
+            cis = paNode.compare(node);
+
+            if (cis == 0) {
+                /*todo treba potom dodatocne upravit*/
+                flag = true;
+                result = false;
+            } else if (cis > 0) {
                 /*do prava*/
                 if (node.getRight() == null) {
                     node.setRight(paNode);
@@ -51,8 +60,13 @@ public class AvlTree {
             }
         }
 
-        count++;
-        fixTree(paNode);
+        if (result) {
+            count++;
+            fixTree(paNode);
+
+        }
+
+        return result;
 
     }
 
@@ -79,7 +93,7 @@ public class AvlTree {
             node = paNode.getNahradnik();
 
             paNode.setData(node);
-
+            paNode = node;
         }
 
         //ak by tu bol nahradnik tak otestujem ci este nema levy sub strom
@@ -89,6 +103,7 @@ public class AvlTree {
         if (node != null) {
             //ak mazem root
             if (paNode.getParent() == null) {
+
                 node.setParent(null);
                 root = node;
                 fixTree(root);
