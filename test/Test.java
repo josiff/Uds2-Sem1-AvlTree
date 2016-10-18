@@ -34,14 +34,23 @@ public class Test {
 
     public void testuj() {
 
-        for (int i = 0; i < 100000; i++) {
+        for (int i = 0; i < 10; i++) {
             insert(i);
 
         }
+        vypis();
+        for (int i = 0; i < 10; i++) {
+            remove(i);
+        }
+        
+       
+        
+        
         
         System.out.println("----------Vys--------------");
         System.out.println(tree.getCount());
         vypis();
+        
 
     }
 
@@ -61,10 +70,17 @@ public class Test {
     private void remove() {
 
         int i = items.get(rnd.nextInt(items.size()));
-        if (tree.remove(new Cislo(i))) {
-            items.remove(i);
+        
+
+    }
+    
+     private void remove(int value) {
+
+       if (tree.remove(new Cislo(value))) {
+           // items.remove(value);
         } else {
-            new Exception("Chyba mazania test");
+           Exception exception = new Exception("Chyba mazania test");
+           exception.printStackTrace();
         }
 
     }
@@ -108,7 +124,7 @@ public class Test {
             } else {
                 Node n = stack.pop();
                 count++;
-                //System.out.printf("%s, %n", n.toString());
+                System.out.printf("%s, %n", n.toString());
                 root = n.getRight();
             }
 

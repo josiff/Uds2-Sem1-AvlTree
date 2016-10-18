@@ -121,7 +121,7 @@ public class AvlTree {
                 paNode.getParent().setRight(null);
             }
 
-            fixTree(paNode);
+            fixTree(paNode.getParent());
 
         }
 
@@ -134,7 +134,7 @@ public class AvlTree {
         while (paNode != null) {
 
             paNode = balanceTree(paNode);
-           // System.out.println(paNode);
+            // System.out.println(paNode);
 
         }
         /*setHeight(paNode);
@@ -185,15 +185,20 @@ public class AvlTree {
         setParent(paNode.getLeft(), paNode);
         node.setRight(paNode);
         setParent(node, paNode.getParent());
-        setParent(paNode, node);
+
         //ak som prehadzoval koren treba upravit aj ref.
         if (node.getParent() == null) {
             root = node;
-        }else{
-            node.getParent().setLeft(node);
+        } else {
+            if (paNode.isLeft()) {
+                node.getParent().setLeft(node);
+            } else {
+                node.getParent().setRight(node);
+
+            }
         }
-        
-        
+        setParent(paNode, node);
+
         setHeight(paNode);
         setHeight(node);
 
@@ -212,13 +217,18 @@ public class AvlTree {
         setParent(paNode.getRight(), paNode);//chyba
         node.setLeft(paNode);
         setParent(node, paNode.getParent());
-        setParent(paNode, node);
+
         //ak som prehadzoval koren treba upravit aj ref.
         if (node.getParent() == null) {
             root = node;
-        }else{
-            node.getParent().setRight(node);
+        } else {
+            if (paNode.isLeft()) {
+                node.getParent().setLeft(node);
+            } else {
+                node.getParent().setRight(node);
+            }
         }
+        setParent(paNode, node);
 
         setHeight(paNode);
         setHeight(node);
@@ -276,7 +286,7 @@ public class AvlTree {
             int cis = 0;
             while (flag == false) {
 
-                cis = node.compare(paNode);
+                cis = paNode.compare(node);
 
                 if (cis == 0) {
                     flag = true;
@@ -341,6 +351,5 @@ public class AvlTree {
     public int getCount() {
         return count;
     }
-    
 
 }

@@ -55,7 +55,7 @@ public class Node {
             return false;
         }
 
-        return true;//this.getParent().getLeft() == this;
+        return this.getParent().getLeft() == this;
     }
 
     public boolean isRight() {
@@ -63,7 +63,7 @@ public class Node {
             return false;
         }
 
-        return true; //this.getParent().getRight() == this;
+        return this.getParent().getRight() == this;
     }
 
     /**
