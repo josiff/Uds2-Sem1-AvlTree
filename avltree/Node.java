@@ -9,16 +9,14 @@ package avltree;
  *
  * @author Jožko
  */
-public  class Node {
-    
+public class Node {
+
     private Node left, right, parent;
     private int height;
 
-    public Node(Node parent) {
-        this.parent = parent;
+    public Node() {
         this.height = 0;
-    }   
-    
+    }
 
     public Node getLeft() {
         return left;
@@ -51,19 +49,58 @@ public  class Node {
     public void setHeight(int height) {
         this.height = height;
     }
-    
-    
-    
-    protected int compare(Node paNode){
-    
+
+    public boolean isLeft() {
+        if (this.getParent() == null) {
+            return false;
+        }
+
+        return true;//this.getParent().getLeft() == this;
+    }
+
+    public boolean isRight() {
+        if (this.getParent() == null) {
+            return false;
+        }
+
+        return true; //this.getParent().getRight() == this;
+    }
+
+    /**
+     * Najde nahradnika ako najpravejsieho laveho syna
+     *
+     * @param paNode
+     * @return nahradnik, inak null
+     */
+    public Node getNahradnik() {
+        if (this.getLeft() != null) {
+
+            Node node = ((Node) this.getLeft());
+
+            while (node.getRight() != null) {//todo
+                node = (Node) node.getRight();
+            }
+            return node;
+
+        } else {
+            return null;
+        }
+
+    }
+
+    protected int compare(Node paNode) {
+
         return 0;
     }
-    
-    
 
-   
-    
-    
-    
-    
+    protected void setData(Node paNode) {
+    }
+
+    @Override
+    public String toString() {
+        String txt = this.parent == null ? "root " : "";
+        return    txt +   "Vyska: " + this.height;
+
+    }
+
 }

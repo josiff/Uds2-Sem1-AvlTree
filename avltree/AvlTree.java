@@ -5,6 +5,9 @@
  */
 package avltree;
 
+import java.util.Hashtable;
+import java.util.Stack;
+
 /**
  *
  * @author Jožko
@@ -12,48 +15,131 @@ package avltree;
 public class AvlTree {
 
     private Node root;
+    private int count;
 
     public void insert(Node paNode) {
         boolean flag = false;
         if (root == null) {
             root = paNode;
-            return;
+            flag = true;
         }
         Node node = root;
 
         while (flag == false) {
 
-            if (node.compare(paNode) > 0) {
+            if (paNode.compare(node) > 0) {
                 /*do prava*/
                 if (node.getRight() == null) {
                     node.setRight(paNode);
+                    setParent(paNode, node);
                     flag = true;
-                    return;
-                };
-                node = node.getRight();
+
+                } else {
+                    node = node.getRight();
+                }
 
             } else {
                 /*do lava*/
                 if (node.getLeft() == null) {
                     node.setLeft(paNode);
+                    setParent(paNode, node);
                     flag = true;
-                    return;
-                };
-                node = node.getLeft();
+
+                } else {
+                    node = node.getLeft();
+                }
             }
         }
 
+        count++;
         fixTree(paNode);
+
+    }
+
+    /**
+     * Mazanie nodu
+     *
+     * @param paNode
+     * @return
+     */
+    public boolean remove(Node paNode) {
+
+        paNode = findNode(paNode);
+
+        if (paNode == null) {
+            return false;
+        }
+        Node node = null;
+
+        count--;
+        //ak ma oboch potomkov najdem najpravejsieho z laveho syna a idem mazat jeho
+        if (paNode.getLeft() != null && paNode.getRight() != null) {
+
+            //najpravejsi z jeho laveho syna  
+            node = paNode.getNahradnik();
+
+            paNode.setData(node);
+
+        }
+
+        //ak by tu bol nahradnik tak otestujem ci este nema levy sub strom
+        //inak ma len jedneho syna tomu nastavim referncie
+        node = paNode.getLeft() != null ? paNode.getLeft() : paNode.getRight();
+
+        if (node != null) {
+            //ak mazem root
+            if (paNode.getParent() == null) {
+                node.setParent(null);
+                root = node;
+                fixTree(root);
+                return true;
+
+            }
+
+            if (paNode.isLeft()) {
+                paNode.getParent().setLeft(node);
+
+            } else {
+
+                paNode.getParent().setRight(node);
+
+            }
+            setParent(node, paNode.getParent());
+            fixTree(node);
+
+        } else if (paNode.getParent() == null) {
+
+            // prazdny storm, vymazavam root
+            root = null;
+
+        } else {
+
+            //ak je list
+            if (paNode.isLeft()) {
+                paNode.getParent().setLeft(null);
+            } else {
+                paNode.getParent().setRight(null);
+            }
+
+            fixTree(paNode);
+
+        }
+
+        return true;
 
     }
 
     private void fixTree(Node paNode) {
 
-        while (paNode != root) {
-            paNode = balanceTree(paNode);
-        }
+        while (paNode != null) {
 
-        setHeight(paNode);
+            paNode = balanceTree(paNode);
+           // System.out.println(paNode);
+
+        }
+        /*setHeight(paNode);
+         System.out.println(paNode);
+         System.out.println("---------");*/
 
     }
 
@@ -100,6 +186,14 @@ public class AvlTree {
         node.setRight(paNode);
         setParent(node, paNode.getParent());
         setParent(paNode, node);
+        //ak som prehadzoval koren treba upravit aj ref.
+        if (node.getParent() == null) {
+            root = node;
+        }else{
+            node.getParent().setLeft(node);
+        }
+        
+        
         setHeight(paNode);
         setHeight(node);
 
@@ -115,10 +209,17 @@ public class AvlTree {
     private Node leftRotation(Node paNode) {
         Node node = paNode.getRight();
         paNode.setRight(node.getLeft());
-        setParent(paNode.getRight(), paNode);
+        setParent(paNode.getRight(), paNode);//chyba
         node.setLeft(paNode);
         setParent(node, paNode.getParent());
         setParent(paNode, node);
+        //ak som prehadzoval koren treba upravit aj ref.
+        if (node.getParent() == null) {
+            root = node;
+        }else{
+            node.getParent().setRight(node);
+        }
+
         setHeight(paNode);
         setHeight(node);
         return node;
@@ -151,7 +252,7 @@ public class AvlTree {
      * @param paNode
      */
     private void setHeight(Node paNode) {
-        int height = Math.max(rightHeight(paNode), leftHeight(paNode));
+        int height = Math.max(rightHeight(paNode), leftHeight(paNode)) + 1;
         paNode.setHeight(height);
     }
 
@@ -166,5 +267,80 @@ public class AvlTree {
             soon.setParent(parent);
         }
     }
+
+    private Node findNode(Node paNode) {
+        Node node = root;
+        if (node != null) {
+
+            boolean flag = false;
+            int cis = 0;
+            while (flag == false) {
+
+                cis = node.compare(paNode);
+
+                if (cis == 0) {
+                    flag = true;
+                } else if (cis < 0) {
+                    if (node.getLeft() == null) {
+                        flag = true;
+                        node = null;
+
+                    } else {
+                        node = node.getLeft();
+                    }
+                } else if (cis > 0) {
+                    if (node.getRight() == null) {
+                        flag = true;
+                        node = null;
+
+                    } else {
+                        node = node.getRight();
+                    }
+                }
+            }
+        }
+
+        return node;
+    }
+
+    /**
+     * InOrder prehliadka
+     *
+     * @param root
+     */
+    public Hashtable inOrder(Node root) {
+        if (root == null) {
+            return null;
+        }
+        Hashtable<Integer, Node> table = new Hashtable<>();
+        int count = 0;
+        Stack<Node> stack = new Stack<Node>();
+
+        while (!stack.isEmpty() || root != null) {
+
+            if (root != null) {
+                stack.push(root);
+                root = root.getLeft();
+            } else {
+                Node n = stack.pop();
+                table.put(count, n);
+                count++;
+                //System.out.printf("%s, %n", n.toString());
+                root = n.getRight();
+            }
+
+        }
+        return table;
+
+    }
+
+    public Node getRoot() {
+        return root;
+    }
+
+    public int getCount() {
+        return count;
+    }
+    
 
 }
