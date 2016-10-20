@@ -8,9 +8,6 @@ package test;
 import avltree.AvlTree;
 import avltree.Node;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Random;
 import java.util.Stack;
 
@@ -21,40 +18,59 @@ import java.util.Stack;
 public class Test {
 
     private AvlTree tree;
-    private ArrayList<Integer> items;
-    private int pocet;
+    private ArrayList<Cislo> items;
+    private int pocet, add, remove;
 
     private Random rnd;
+    private Random rndOper;
 
     public Test() {
         this.tree = new AvlTree();
         this.items = new ArrayList<>();
         this.rnd = new Random();
+        this.rndOper = new Random();
+
         pocet = 0;
 
     }
 
     public void testuj() {
 
-         for (int i = 0; i < 10000; i++) {            
+        /* for (int i = 0; i < 10000; i++) {
          insert();
 
          }
          vypis();
 
-         for (int i = 0; i < 8000; i++) {            
+         for (int i = 0; i < 5000; i++) {
          remove();
          }
-        
-         vypis();
-         
-        
+
+         vypis();*/
+        for (int i = 0; i < 100; i++) {
+            insert();
+
+        }
+        vypis();
+
+        double cis = 0.0;
+        for (int i = 0; i < 10000; i++) {
+            cis = rndOper.nextDouble();
+            if (cis < 0.5) {
+
+                remove();
+                remove++;
+            } else {
+                insert();
+                add++;
+            }
+        }
+        vypis();
 
     }
 
     private void insert() {
         int value = rnd.nextInt();
-        //System.out.println("insert(" + value + ");");
         insert(value);
 
     }
@@ -63,17 +79,16 @@ public class Test {
         Cislo cis = new Cislo(value);
         if (tree.insert(cis)) {
             pocet++;
-            items.add(value);
+            items.add(cis);
         }
 
     }
 
     private void remove() {
-
-        //Cislo cis = items.get(rnd.nextInt(items.size()));
-        Cislo cis = new Cislo(items.get(rnd.nextInt(pocet)));
-        //System.out.println("remove(" + cis.getKey() + ");");
-        remove(cis);
+        if (pocet > 0) {
+            Cislo cis = items.get(rnd.nextInt(items.size()));
+            remove(cis);
+        }
 
     }
 
@@ -87,7 +102,7 @@ public class Test {
 
         if (tree.remove(cis)) {
             pocet--;
-            // items.remove(cis.getKey());
+            items.remove(cis);
 
         } else {
 
@@ -101,21 +116,15 @@ public class Test {
 
         System.out.println("----------Vys--------------");
         System.out.println("Strom pocet:" + tree.getCount());
-        //System.out.println("List pocet:" + items.size());
+        System.out.println("List pocet:" + items.size());
         System.out.println("Test pocet:" + pocet);
 
-        /* Collections.sort(items);
-         String result = "";
-         for (int i : items) {
-         result += String.valueOf(i) + ", ";
-
-         }*/
         writeTree(tree.getRoot());
-        //System.out.println("\n"+result);
-//        System.out.println((tr.checkNext() ? "Spravne " : "Nespravne ") + "rozlozenie prvkov");
-
-        //System.out.println(tr.prechodPre(tr.getRoot()));
+        System.out.println("Pridanych:" + add);
+        System.out.println("Vymazanych:" + remove);
+        checkHeight(tree.getRoot());
         System.out.println("---------------------");
+
     }
 
     /**
@@ -140,13 +149,30 @@ public class Test {
             } else {
                 Node n = stack.pop();
                 count++;
-               // System.out.printf("%s, %n", n.toString());
+                // System.out.printf("%s, %n", n.toString());
                 root = n.getRight();
             }
 
         }
 
         System.out.println("Inorder pocet:" + count);
+
+    }
+
+    /*Kontrola vyvazovacich faktorov*/
+    private void checkHeight(Node paNode) {
+
+        if (paNode != null) {
+            int diff = tree.leftHeight(paNode) - tree.rightHeight(paNode);
+
+            if (diff > 1 || diff < -1) {
+                System.out.println("Zla vyska");
+                return;
+            } else {
+                checkHeight(paNode.getLeft());
+                checkHeight(paNode.getRight());
+            }
+        }
 
     }
 

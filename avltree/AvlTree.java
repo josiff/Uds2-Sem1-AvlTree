@@ -257,7 +257,7 @@ public class AvlTree {
      * @param paNode
      * @return
      */
-    private int leftHeight(Node paNode) {
+    public int leftHeight(Node paNode) {
         return paNode.getLeft() == null ? 0 : paNode.getLeft().getHeight();
     }
 
@@ -267,7 +267,7 @@ public class AvlTree {
      * @param paNode
      * @return
      */
-    private int rightHeight(Node paNode) {
+    public int rightHeight(Node paNode) {
         return paNode.getRight() == null ? 0 : paNode.getRight().getHeight();
     }
 
