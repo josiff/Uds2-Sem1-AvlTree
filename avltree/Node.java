@@ -13,9 +13,15 @@ public class Node {
 
     private Node left, right, parent;
     private int height;
+    private INode data;
 
     public Node() {
         this.height = 0;
+    }
+    
+    public Node(INode paNode) {
+        this.height = 0;
+        this.data = paNode;
     }
 
     public Node getLeft() {
@@ -87,14 +93,14 @@ public class Node {
         }
 
     }
-
+/*
     protected int compare(Node paNode) {
 
         return 0;
     }
 
     protected void setData(Node paNode) {
-    }
+    }*/
 
     @Override
     public String toString() {
@@ -102,5 +108,16 @@ public class Node {
         return    txt +   "Vyska: " + this.height;
 
     }
+
+    public INode getData() {
+        return data;
+    }
+
+    public void setData(INode data) {
+        this.data = data;
+    }
+    
+    
+    
 
 }

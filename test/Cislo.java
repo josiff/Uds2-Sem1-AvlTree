@@ -5,13 +5,14 @@
  */
 package test;
 
+import avltree.INode;
 import avltree.Node;
 
 /**
  *
  * @author Jožko
  */
-public class Cislo extends Node {
+public class Cislo implements INode {
 
     private int key;
 
@@ -20,13 +21,10 @@ public class Cislo extends Node {
         this.key = key;
     }
 
-    @Override
-    protected void setData(Node paNode) {
-        this.key = ((Cislo) paNode).getKey();
-    }
+   
 
     @Override
-    public int compare(Node paNode) {
+    public int compare(INode paNode) {
         
         Cislo cis = (Cislo) paNode;
         

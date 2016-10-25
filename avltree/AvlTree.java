@@ -30,7 +30,7 @@ public class AvlTree {
         int cis = 0;
 
         while (flag == false) {
-            cis = paNode.compare(node);
+            cis = ((INode) paNode.getData()).compare(node.getData());
 
             if (cis == 0) {
                 /*todo treba potom dodatocne upravit*/
@@ -92,7 +92,7 @@ public class AvlTree {
             //najpravejsi z jeho laveho syna  
             node = paNode.getNahradnik();
 
-            paNode.setData(node);
+            paNode.setData(node.getData());
             paNode = node;
         }
 
@@ -293,7 +293,7 @@ public class AvlTree {
         }
     }
 
-    private Node findNode(Node paNode) {
+    public Node findNode(Node paNode) {
         Node node = root;
         if (node != null) {
 
@@ -301,7 +301,7 @@ public class AvlTree {
             int cis = 0;
             while (flag == false) {
 
-                cis = paNode.compare(node);
+                cis = ((INode) paNode.getData()).compare(node.getData());
 
                 if (cis == 0) {
                     flag = true;

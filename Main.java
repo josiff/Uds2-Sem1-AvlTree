@@ -2,6 +2,7 @@
 import avltree.Node;
 import java.util.ArrayList;
 import java.util.Random;
+import model.Pobocka;
 import test.Cislo;
 import test.Test;
 
@@ -21,8 +22,10 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-      Test tst = new Test();
-      tst.testuj();
+        Test tst = new Test();
+        tst.testuj();
+
+       
 
     }
 

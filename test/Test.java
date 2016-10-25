@@ -6,6 +6,7 @@
 package test;
 
 import avltree.AvlTree;
+import avltree.INode;
 import avltree.Node;
 import java.util.ArrayList;
 import java.util.Random;
@@ -18,7 +19,7 @@ import java.util.Stack;
 public class Test {
 
     private AvlTree tree;
-    private ArrayList<Cislo> items;
+    private ArrayList<INode> items;
     private int pocet, add, remove;
 
     private Random rnd;
@@ -76,8 +77,8 @@ public class Test {
     }
 
     private void insert(int value) {
-        Cislo cis = new Cislo(value);
-        if (tree.insert(cis)) {
+        INode cis = new Cislo(value);
+        if (tree.insert(new Node(cis))) {
             pocet++;
             items.add(cis);
         }
@@ -86,8 +87,8 @@ public class Test {
 
     private void remove() {
         if (pocet > 0) {
-            Cislo cis = items.get(rnd.nextInt(items.size()));
-            remove(cis);
+            INode cis = items.get(rnd.nextInt(items.size()));
+            remove((Cislo)cis);
         }
 
     }
@@ -100,7 +101,7 @@ public class Test {
 
     private void remove(Cislo cis) {
 
-        if (tree.remove(cis)) {
+        if (tree.remove(new Node(cis))) {
             pocet--;
             items.remove(cis);
 

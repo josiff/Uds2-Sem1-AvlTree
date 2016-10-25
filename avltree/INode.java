@@ -11,6 +11,6 @@ package avltree;
  */
 public interface INode {
     
-    public int compare( INode paNode);
+    public int compare( INode paData);
     
 }
