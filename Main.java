@@ -1,10 +1,6 @@
 
-import avltree.Node;
-import java.util.ArrayList;
-import java.util.Random;
+import gui.BaseForm;
 import model.Pobocka;
-import test.Cislo;
-import test.Test;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,8 +18,13 @@ public class Main {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        Test tst = new Test();
-        tst.testuj();
+        /*Test tst = new Test();
+        tst.testuj();*/
+        
+        new BaseForm().setVisible(true);
+        
+        
+       
 
        
 

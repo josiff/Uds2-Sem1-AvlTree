@@ -7,6 +7,7 @@ package model;
 
 import avltree.AvlTree;
 import avltree.INode;
+import avltree.Node;
 
 /**
  *
@@ -24,11 +25,33 @@ public class Pobocka implements INode {
         this.knihyStr = new AvlTree();
     }
 
+    /**
+     * Pridanie knihy do stromu
+     *
+     * @param nazov
+     * @return
+     */
+    public boolean addKnihu(String nazov) {
+        boolean result = false;
+
+        if (nazov.equals("")) {
+            System.out.println("Empty string");
+        } else {
+            Kniha kn = new Kniha(nazov, knihyInt.getCount());
+            knihyStr.insert(new Node(new KnihaInt(kn)));
+            knihyInt.insert(new Node(new KnihaStr(kn)));
+
+        }
+
+        return result;
+
+    }
+
     @Override
     public int compare(INode paNode) {
         Pobocka pob = (Pobocka) paNode;
 
-       return this.nazov.compareTo(pob.getNazov());
+        return this.nazov.compareTo(pob.getNazov());
 
     }
 
@@ -55,5 +78,13 @@ public class Pobocka implements INode {
     public void setKnihyInt(AvlTree knihyInt) {
         this.knihyInt = knihyInt;
     }
+
+    @Override
+    public String toString() {
+       return nazov;
+    }
+    
+    
+    
 
 }

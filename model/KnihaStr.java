@@ -11,39 +11,25 @@ import avltree.INode;
  *
  * @author Jožko
  */
-public class KnihaInt extends Kniha {
+public class KnihaStr extends Kniha{
 
-    public KnihaInt(String nazovKnihy, int id) {
+    public KnihaStr(String nazovKnihy, int id) {
         super(nazovKnihy, id);
     }
 
-    public KnihaInt(Kniha kniha) {
+    public KnihaStr(Kniha kniha) {
         super(kniha.getNazovKnihy(), kniha.getId());
     }
-    
-    
-    
-    
     
     
 
     @Override
     public int compare(INode paData) {
-
-        KnihaInt knih = (KnihaInt) paData;
-   
-        if (this.getId() < knih.getId()) {
-            return -1;
-
-        } else if (this.getId() > knih.getId()) {
-            return 1;
-        } else {
-            return 0;
-        }
-    
+        KnihaStr knih = (KnihaStr) paData;
+        
+        return this.nazovKnihy.compareTo(knih.getNazovKnihy());
+        
+        
     }
     
-
-   
-
 }

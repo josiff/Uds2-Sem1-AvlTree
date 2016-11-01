@@ -12,19 +12,28 @@ import java.util.Date;
  *
  * @author Jožko
  */
-public abstract class Kniha implements INode{
+public class Kniha implements INode {
+
+    protected String autor;
+    protected String nazovKnihy;
+    protected String isbn;
+    protected int ean;
+    protected String zaner;
+    protected Pobocka pobocka;
+    protected int vypoz; // v dnoch
+    protected double pokuta;
+    protected int id;
+    protected Date odda;
+    protected Date doda;
+
+    public Kniha(String nazovKnihy, int id) {
+        this.nazovKnihy = nazovKnihy;
+        this.id = id;
+    }
     
-    private String autor;
-    private String nazovKnihy;
-    private String isbn;
-    private int ean;
-    private String zaner;
-    private Pobocka pobocka;
-    private int vypoz; // v dnoch
-    private double pokuta;
-    private int id;
-    private Date odda;
-    private Date doda;
+    
+    
+    
 
     public String getAutor() {
         return autor;
@@ -113,6 +122,12 @@ public abstract class Kniha implements INode{
     public void setDoda(Date doda) {
         this.doda = doda;
     }
-    
-    
+
+    @Override
+    public int compare(INode paData) {
+        return 0;
+    }
+
+   
+
 }

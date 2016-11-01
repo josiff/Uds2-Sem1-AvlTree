@@ -5,9 +5,9 @@
  */
 package avltree;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Stack;
-import test.Cislo;
 
 /**
  *
@@ -333,11 +333,12 @@ public class AvlTree {
      *
      * @param root
      */
-    public Hashtable inOrder(Node root) {
+    public ArrayList inOrder(Node root) {
+        ArrayList<INode> list = new ArrayList<>();
         if (root == null) {
-            return null;
+            return list;
         }
-        Hashtable<Integer, Node> table = new Hashtable<>();
+
         int count = 0;
         Stack<Node> stack = new Stack<Node>();
 
@@ -348,15 +349,25 @@ public class AvlTree {
                 root = root.getLeft();
             } else {
                 Node n = stack.pop();
-                table.put(count, n);
+                list.add(n.getData());
                 count++;
                 //System.out.printf("%s, %n", n.toString());
                 root = n.getRight();
             }
 
         }
-        return table;
+        return list;
 
+    }
+    
+    /**
+     * Vrati array list pre Table
+     * @return 
+     */
+    public ArrayList getTableRows(){
+        
+        return inOrder(root);
+    
     }
 
     public Node getRoot() {
