@@ -133,10 +133,11 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         pobBtnRefreshKnih = new javax.swing.JButton();
         pobBtnPozic = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        checkNazov = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
         jScrollPane9 = new javax.swing.JScrollPane();
         pobTablPozKnihy = new javax.swing.JTable();
+        jButton3 = new javax.swing.JButton();
         pobBtnHladajPob = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
@@ -171,6 +172,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         nasTxtPocKnih = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         nasTxtPocCit = new javax.swing.JTextField();
+        nastBtnReset = new javax.swing.JButton();
         dateChooser = new datechooser.beans.DateChooserCombo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -353,8 +355,8 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             }
         });
 
-        jCheckBox1.setSelected(true);
-        jCheckBox1.setText("order by Nazov");
+        checkNazov.setSelected(true);
+        checkNazov.setText("order by Nazov");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -371,7 +373,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pobBtnPozic)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 207, Short.MAX_VALUE)
-                .addComponent(jCheckBox1)
+                .addComponent(checkNazov)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pobBtnRefreshKnih)
                 .addContainerGap())
@@ -386,7 +388,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                     .addComponent(pobBtnRefreshKnih)
                     .addComponent(pobBtnPozic)
                     .addComponent(jButton2)
-                    .addComponent(jCheckBox1))
+                    .addComponent(checkNazov))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
         );
@@ -406,15 +408,30 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         ));
         jScrollPane9.setViewportView(pobTablPozKnihy);
 
+        jButton3.setText("Refresh");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButton3)
+                .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
+                .addComponent(jScrollPane9, javax.swing.GroupLayout.PREFERRED_SIZE, 317, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         jTabbedPane2.addTab("Požičané knihy", jPanel5);
@@ -743,6 +760,13 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                 .addContainerGap(41, Short.MAX_VALUE))
         );
 
+        nastBtnReset.setText("Reset");
+        nastBtnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nastBtnResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
@@ -750,13 +774,17 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(457, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
+                .addComponent(nastBtnReset)
+                .addContainerGap())
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nastBtnReset)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(473, Short.MAX_VALUE))
         );
 
@@ -918,7 +946,9 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             dlg.setVisible(true);
 
             if (dlg.result) {
-                refreshTabKniha(core.getKnihOfPobocka(pob));
+
+                refreshTabKniha();
+
             }
         }
 
@@ -932,7 +962,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
      */
     private void pobBtnRefreshKnihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnRefreshKnihActionPerformed
 
-        refreshTabKniha(core.getKnihOfPobocka(getPobocku()));
+        refreshTabKniha();
     }//GEN-LAST:event_pobBtnRefreshKnihActionPerformed
 
     /**
@@ -1059,16 +1089,19 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private void pobBtnPozicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnPozicActionPerformed
 
         String str = JOptionPane.showInputDialog(this, "Zadajte čitatela");
+        System.out.println(str);
+        if (str != null) {
+            if (str.isEmpty()) {
+                showErr("Nevyplnili ste číslo čitateľa!");
+            } else {
+                int citatel = Integer.parseInt(str);
 
-        if (str.isEmpty()) {
-            showErr("Nevyplnili ste číslo čitateľa!");
-        } else {
-            int citatel = Integer.parseInt(str);
+                core.urobPozicku(getPobocku(), getNazKnihy(), citatel, dateChooser.getCurrent());
 
-            core.urobPozicku(getPobocku(), getNazKnihy(), citatel, dateChooser.getCurrent());
-
-            refreshTabPobPoz();
+                refreshTabPobPoz();
+            }
         }
+
         //core.urobPozicku(null, null, WIDTH);
     }//GEN-LAST:event_pobBtnPozicActionPerformed
 
@@ -1091,15 +1124,57 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
 
     /**
      * Btn refresh pobocky
-     * @param evt 
+     *
+     * @param evt
      */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         refreshTabPoboc();
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    /**
+     * Hladaj knihu
+     *
+     * @param evt
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+
+        String result = "";
+        ArrayList list = null;
+        if (checkNazov.isSelected()) {
+            result = showInput("Zadajte názov knihy");
+            if (result != null) {
+                list = core.findKnihuOfPobocka(getPobocku(), result);
+            }
+        } else {
+
+            result = showInput("Zadajte id knihy");
+            if (result != null) {
+                if (!result.isEmpty()) {
+
+                    int cis = Integer.parseInt(result);
+                    list = core.findKnihuOfPobocka(getPobocku(), cis);
+                }
+            }
+        }
+        refreshTabKniha(list);
+
+
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void nastBtnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nastBtnResetActionPerformed
+        core = new Core();
+        ArrayList list = new ArrayList();
+        refreshTabPoboc(list);
+        refreshTabKniha(list);
+        refreshTabPobPoz(list);
+        refreshTabAllKnih(list);
+        refreshTabCit(list);
+        refreshTabCitPoz(list);
+    }//GEN-LAST:event_nastBtnResetActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        refreshTabPobPoz();
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * Vrati nazov aktulane oznacenej pobocky
@@ -1194,6 +1269,15 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
 
     }
 
+    private void refreshTabKniha() {
+        if (checkNazov.isSelected()) {
+            refreshTabKniha(core.getKnihOfPobocka(getPobocku()));
+        } else {
+
+            refreshTabKniha(core.getKnihOfPobockaInt(getPobocku()));
+        }
+    }
+
     private void refreshTabKniha(ArrayList list) {
         pobTabKnihy.removeAll();
         if (list != null) {
@@ -1214,6 +1298,17 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
 
     }
 
+    private void refreshTabAllKnih(ArrayList list) {
+        knihTbAll.removeAll();
+        if (list != null) {
+            modelAllKnihy.setRows(list);
+            knihTbAll.setModel(modelAllKnihy);
+        }
+        knihTbAll.repaint();
+        knihTbAll.updateUI();
+
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -1228,16 +1323,21 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BaseForm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BaseForm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BaseForm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BaseForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(BaseForm.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
@@ -1250,6 +1350,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox checkNazov;
     private javax.swing.JButton citBtnDel;
     private javax.swing.JButton citBtnPridaj;
     private javax.swing.JButton citBtnRefreshDown;
@@ -1262,7 +1363,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private javax.swing.JMenuItem fileBtnSave;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1303,6 +1404,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private javax.swing.JTextField nasTxtPocCit;
     private javax.swing.JTextField nasTxtPocKnih;
     private javax.swing.JTextField nasTxtPocPob;
+    private javax.swing.JButton nastBtnReset;
     private javax.swing.JButton pobBtnAdd;
     private javax.swing.JButton pobBtnCount;
     private javax.swing.JButton pobBtnDel;
@@ -1402,6 +1504,22 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         modelPozKnihy.setRows(core.getPobPozKnihy(getPobocku()));
         pobTablPozKnihy.setModel(modelPozKnihy);
 
+        pobTablPozKnihy.repaint();
+        pobTablPozKnihy.updateUI();
+
+    }
+
+    /**
+     * Tabulka pozicanych knih na pobocke
+     *
+     * @param list
+     */
+    private void refreshTabPobPoz(ArrayList list) {
+        pobTablPozKnihy.removeAll();
+        if (list != null) {
+            modelPozKnihy.setRows(list);
+            pobTablPozKnihy.setModel(modelPozKnihy);
+        }
         pobTablPozKnihy.repaint();
         pobTablPozKnihy.updateUI();
 

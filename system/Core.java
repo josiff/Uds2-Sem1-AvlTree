@@ -190,6 +190,9 @@ public class Core {
     public Citatel findCitatel(int idCit) {
 
         Node node = citatelia.findNode(new Node(new Citatel(idCit)));
+        if (node == null) {
+            return null;
+        }
         return (Citatel) node.getData();
     }
 
@@ -204,6 +207,12 @@ public class Core {
         return citatelia.remove(new Node(new Citatel(idCit)));
     }
 
+    /**
+     * Vrati knihy podla stringu
+     *
+     * @param nazov
+     * @return
+     */
     public ArrayList getKnihOfPobocka(String nazov) {
 
         if (nazov.isEmpty()) {
@@ -218,8 +227,27 @@ public class Core {
         return pob.getKnihyStr().getTableRows();
 
     }
-    
-   
+
+    /**
+     * Vrati knihy podla id
+     *
+     * @param nazov
+     * @return
+     */
+    public ArrayList getKnihOfPobockaInt(String nazov) {
+
+        if (nazov.isEmpty()) {
+            return null;
+        }
+
+        Pobocka pob = findPobocku(nazov);
+        if (pob == null) {
+            return null;
+        }
+
+        return pob.getKnihyInt().getTableRows();
+
+    }
 
     /**
      * Hladanie knihy na pobocke
@@ -231,15 +259,34 @@ public class Core {
     public ArrayList findKnihuOfPobocka(String pobocka, String kniha) {
 
         Pobocka pob = findPobocku(pobocka);
-        if (pob != null) {
+        if (pob == null) {
             setErrMsg("Pobočka sa nenašla");
             return null;
         }
 
-        if (pob != null) {
-            return null;
+        return pob.findKnihuArray(kniha);
+
+    }
+
+    /**
+     * Hladanie knihy na pobocke
+     *
+     * @param pobocka
+     * @param kniha
+     * @return
+     */
+    public ArrayList findKnihuOfPobocka(String pobocka, int kniha) {
+
+        if (pobocka.isEmpty()) {
 
         }
+
+        Pobocka pob = findPobocku(pobocka);
+        if (pob == null) {
+            setErrMsg("Pobočka sa nenašla");
+            return null;
+        }
+
         return pob.findKnihuArray(kniha);
 
     }

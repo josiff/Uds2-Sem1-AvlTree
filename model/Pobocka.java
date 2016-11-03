@@ -170,7 +170,7 @@ public class Pobocka implements INode {
      */
     public boolean urobPozicku(Kniha kniha) {
 
-        return pozKnihy.insert(new Node(kniha));
+        return pozKnihy.insert(new Node(new KnihaStr(kniha)));
 
     }
 
