@@ -50,6 +50,11 @@ public class Cislo implements INode {
     public String toString() {
         return super.toString() + " " + String.valueOf(this.key);
     }
+
+    @Override
+    public String save() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
     
     

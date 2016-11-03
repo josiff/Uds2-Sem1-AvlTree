@@ -1,5 +1,6 @@
 
 import gui.BaseForm;
+import java.util.Calendar;
 import model.Pobocka;
 
 /*
@@ -19,14 +20,9 @@ public class Main {
     public static void main(String[] args) {
         // TODO code application logic here
         /*Test tst = new Test();
-        tst.testuj();*/
-        
-        new BaseForm().setVisible(true);
-        
-        
-       
+         tst.testuj();*/
 
-       
+        new BaseForm().setVisible(true);
 
     }
 

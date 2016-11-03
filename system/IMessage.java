@@ -3,16 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package avltree;
+package system;
 
 /**
  *
  * @author Jožko
  */
-public interface INode {
+public interface IMessage {
     
-    public int compare( INode paData);
-    
-    public String save();
+    public void onMessage(Message msg);
     
 }

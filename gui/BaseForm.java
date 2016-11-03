@@ -5,25 +5,38 @@
  */
 package gui;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
-import model.Core;
-import model.Pobocka;
+import javax.swing.JTable;
+import javax.swing.JViewport;
+import javax.swing.ListSelectionModel;
+import system.Core;
+import model.componentes.CitatelTableModel;
 import model.componentes.KnihaTableModel;
 import model.componentes.PobockaTableModel;
 import model.componentes.MyTableModel;
+import system.IMessage;
+import system.Message;
 import test.Test;
 
 /**
  *
  * @author Jožko
  */
-public class BaseForm extends javax.swing.JFrame {
+public class BaseForm extends javax.swing.JFrame implements IMessage {
 
     private test.Test test;
     private Core core;
-    private MyTableModel modelPob;
-    private MyTableModel modelKnihy;
+    private MyTableModel modelPob, // tabulka pobociek
+            modelKnihy, // tabulka knih
+            modelAllKnihy, // tabulka vsetkych knih
+            modelCitatel, // tabulka citatelov
+            modelAktPoz, // aktulane pozicky ciatatela
+            modelHistPoz, // historia u citatela
+            modelPozKnihy, // pobocka aktualne pozicane knihy
+            modelOmesPoz;   // tabulka omeckanych vrateni pri citatelovi
 
     /**
      * Creates new form BaseForm
@@ -31,12 +44,54 @@ public class BaseForm extends javax.swing.JFrame {
     public BaseForm() {
         initComponents();
         core = new Core();
+        core.addMsgListener(this);
+        iniTables();
 
-        modelPob = new PobockaTableModel(core.getPobocky().getTableRows());
+    }
+
+    /**
+     * Inicializacia tabuliek
+     */
+    private void iniTables() {
+        modelPob = new PobockaTableModel();
         tabPobocky.setModel(modelPob);
+        tabPobocky.setRowSelectionAllowed(true);
+        tabPobocky.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        modelKnihy = new KnihaTableModel(new ArrayList<>());
+        modelKnihy = new KnihaTableModel();
         pobTabKnihy.setModel(modelKnihy);
+        pobTabKnihy.setRowSelectionAllowed(true);
+        pobTabKnihy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        modelAllKnihy = new KnihaTableModel();
+        knihTbAll.setModel(modelAllKnihy);
+        knihTbAll.setRowSelectionAllowed(true);
+        knihTbAll.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        modelCitatel = new CitatelTableModel();
+        tableCita.setModel(modelCitatel);
+        tableCita.setRowSelectionAllowed(true);
+        tableCita.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        modelAktPoz = new KnihaTableModel();
+        tableAktPozic.setModel(modelAktPoz);
+        tableAktPozic.setRowSelectionAllowed(true);
+        tableAktPozic.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        modelHistPoz = new KnihaTableModel();
+        tableHistPozic.setModel(modelHistPoz);
+        tableHistPozic.setRowSelectionAllowed(true);
+        tableHistPozic.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        modelOmesPoz = new KnihaTableModel();
+        tableOmesPoz.setModel(modelOmesPoz);
+        tableOmesPoz.setRowSelectionAllowed(true);
+        tableOmesPoz.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        modelPozKnihy = new KnihaTableModel();
+        pobTablPozKnihy.setModel(modelPozKnihy);
+        pobTablPozKnihy.setRowSelectionAllowed(true);
+        pobTablPozKnihy.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
     }
 
@@ -49,7 +104,9 @@ public class BaseForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jMenu3 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
+        jTab = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         testAreaVypis = new javax.swing.JTextArea();
@@ -74,16 +131,66 @@ public class BaseForm extends javax.swing.JFrame {
         pobBtnDelKnih = new javax.swing.JButton();
         pobPridKnih = new javax.swing.JButton();
         pobBtnRefreshKnih = new javax.swing.JButton();
+        pobBtnPozic = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jCheckBox1 = new javax.swing.JCheckBox();
         jPanel5 = new javax.swing.JPanel();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        pobTablPozKnihy = new javax.swing.JTable();
+        pobBtnHladajPob = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        knihTbAll = new javax.swing.JTable();
+        knihBtnRefres = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        citTabPanel = new javax.swing.JTabbedPane();
+        jPanel7 = new javax.swing.JPanel();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        tableAktPozic = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        tableHistPozic = new javax.swing.JTable();
+        jPanel9 = new javax.swing.JPanel();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        tableOmesPoz = new javax.swing.JTable();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tableCita = new javax.swing.JTable();
+        citBtnPridaj = new javax.swing.JButton();
+        citBtnDel = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
+        citTxtMeno = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        citTxtPriez = new javax.swing.JTextField();
+        citBtnRefreshDown = new javax.swing.JButton();
+        jPanel10 = new javax.swing.JPanel();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        nasTxtPocPob = new javax.swing.JTextField();
+        jLabel7 = new javax.swing.JLabel();
+        nasTxtPocKnih = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        nasTxtPocCit = new javax.swing.JTextField();
+        dateChooser = new datechooser.beans.DateChooserCombo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        fileBtnGener = new javax.swing.JMenuItem();
         fileBtnSave = new javax.swing.JMenuItem();
         fileBtnLoad = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+
+        jMenu3.setText("jMenu3");
+
+        jMenuItem1.setText("jMenuItem1");
+        jMenu3.add(jMenuItem1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jTab.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTabStateChanged(evt);
+            }
+        });
 
         testAreaVypis.setColumns(20);
         testAreaVypis.setRows(5);
@@ -157,11 +264,11 @@ public class BaseForm extends javax.swing.JFrame {
                 .addGap(40, 40, 40)
                 .addComponent(testBtnDelete)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 431, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Testovanie", jPanel1);
+        jTab.addTab("Testovanie", jPanel1);
 
         tabPobocky.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -172,6 +279,11 @@ public class BaseForm extends javax.swing.JFrame {
             }
         ));
         tabPobocky.setColumnSelectionAllowed(true);
+        tabPobocky.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabPobockyMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tabPobocky);
         tabPobocky.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
@@ -227,17 +339,40 @@ public class BaseForm extends javax.swing.JFrame {
             }
         });
 
+        pobBtnPozic.setText("Požičaj");
+        pobBtnPozic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pobBtnPozicActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Hladaj");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jCheckBox1.setSelected(true);
+        jCheckBox1.setText("order by Nazov");
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+            .addComponent(jScrollPane3)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(3, 3, 3)
                 .addComponent(pobPridKnih)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(pobBtnDelKnih)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pobBtnPozic)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 207, Short.MAX_VALUE)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(pobBtnRefreshKnih)
                 .addContainerGap())
         );
@@ -248,25 +383,55 @@ public class BaseForm extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pobBtnDelKnih)
                     .addComponent(pobPridKnih)
-                    .addComponent(pobBtnRefreshKnih))
+                    .addComponent(pobBtnRefreshKnih)
+                    .addComponent(pobBtnPozic)
+                    .addComponent(jButton2)
+                    .addComponent(jCheckBox1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 300, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Knihy", jPanel4);
+
+        pobTablPozKnihy.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane9.setViewportView(pobTablPozKnihy);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 664, Short.MAX_VALUE)
+            .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 345, Short.MAX_VALUE)
+            .addComponent(jScrollPane9, javax.swing.GroupLayout.DEFAULT_SIZE, 362, Short.MAX_VALUE)
         );
 
         jTabbedPane2.addTab("Požičané knihy", jPanel5);
+
+        pobBtnHladajPob.setText("Hladaj");
+        pobBtnHladajPob.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                pobBtnHladajPobActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Refresh");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -274,23 +439,28 @@ public class BaseForm extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTabbedPane2)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane2)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(pobTxtNazov, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(pobBtnAdd))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(pobBtnDel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(pobBtnCount)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addComponent(pobBtnAdd)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(pobBtnHladajPob)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(pobBtnDel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(pobBtnCount)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(22, 22, 22))))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -299,11 +469,13 @@ public class BaseForm extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(pobTxtNazov, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(pobBtnAdd))
+                    .addComponent(pobBtnAdd)
+                    .addComponent(pobBtnHladajPob))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(pobBtnDel)
-                    .addComponent(pobBtnCount))
+                    .addComponent(pobBtnCount)
+                    .addComponent(jButton1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -311,22 +483,294 @@ public class BaseForm extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Pobočky", jPanel2);
+        jTab.addTab("Pobočky", jPanel2);
+
+        knihTbAll.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane4.setViewportView(knihTbAll);
+
+        knihBtnRefres.setText("Refresh");
+        knihBtnRefres.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                knihBtnRefresActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 689, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 689, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(knihBtnRefres)
+                .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 602, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(knihBtnRefres)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(114, Short.MAX_VALUE))
         );
 
-        jTabbedPane1.addTab("Knihy", jPanel3);
+        jTab.addTab("Knihy", jPanel3);
+
+        tableAktPozic.setBackground(new java.awt.Color(153, 153, 153));
+        tableAktPozic.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane6.setViewportView(tableAktPozic);
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+        );
+
+        citTabPanel.addTab("Aktuálne pôžičky", jPanel7);
+
+        tableHistPozic.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane7.setViewportView(tableHistPozic);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane7, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+        );
+
+        citTabPanel.addTab("História", jPanel8);
+
+        tableOmesPoz.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane8.setViewportView(tableOmesPoz);
+
+        javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
+        jPanel9.setLayout(jPanel9Layout);
+        jPanel9Layout.setHorizontalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 664, Short.MAX_VALUE)
+        );
+        jPanel9Layout.setVerticalGroup(
+            jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane8, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+        );
+
+        citTabPanel.addTab("Omeškania", jPanel9);
+
+        tableCita.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {},
+                {},
+                {},
+                {}
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane5.setViewportView(tableCita);
+
+        citBtnPridaj.setText("Pridaj");
+        citBtnPridaj.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                citBtnPridajActionPerformed(evt);
+            }
+        });
+
+        citBtnDel.setText("Vymaz");
+
+        jLabel4.setText("Meno");
+
+        jLabel5.setText("Prizvisko");
+
+        citBtnRefreshDown.setText("Refresh");
+        citBtnRefreshDown.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                citBtnRefreshDownActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(citTabPanel)
+                    .addComponent(jScrollPane5)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(citBtnDel)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(citTxtMeno, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(citTxtPriez, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(citBtnPridaj)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(citBtnRefreshDown)))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(citBtnPridaj)
+                    .addComponent(jLabel4)
+                    .addComponent(citTxtMeno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5)
+                    .addComponent(citTxtPriez, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addComponent(citBtnDel)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(citBtnRefreshDown)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(citTabPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jTab.addTab("Citatelia", jPanel6);
+
+        jPanel11.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jLabel6.setText("Počet pobočiek");
+
+        nasTxtPocPob.setText("5");
+
+        jLabel7.setText("Počet knih");
+
+        nasTxtPocKnih.setText("10");
+
+        jLabel8.setText("Počet čitateľov");
+
+        nasTxtPocCit.setText("10");
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(nasTxtPocCit, javax.swing.GroupLayout.DEFAULT_SIZE, 55, Short.MAX_VALUE))
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(nasTxtPocPob)
+                            .addComponent(nasTxtPocKnih, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))))
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(nasTxtPocPob, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(nasTxtPocKnih, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(nasTxtPocCit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(41, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(457, Short.MAX_VALUE))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(473, Short.MAX_VALUE))
+        );
+
+        jTab.addTab("Nastavenia", jPanel10);
 
         jMenu1.setText("File");
+
+        fileBtnGener.setText("Generuj");
+        fileBtnGener.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fileBtnGenerActionPerformed(evt);
+            }
+        });
+        jMenu1.add(fileBtnGener);
 
         fileBtnSave.setText("Save");
         fileBtnSave.addActionListener(new java.awt.event.ActionListener() {
@@ -349,40 +793,52 @@ public class BaseForm extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jTabbedPane1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTab)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(jTabbedPane1)
+                .addContainerGap()
+                .addComponent(dateChooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTab)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Zobrazi pocet pobociek
+     *
+     * @param evt
+     */
     private void pobBtnCountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnCountActionPerformed
         System.out.println("Počet pobočiek:" + core.getPobocky().getCount());
     }//GEN-LAST:event_pobBtnCountActionPerformed
 
+    /**
+     * Vymazanie pobocky
+     *
+     * @param evt
+     */
     private void pobBtnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnDelActionPerformed
         int row = tabPobocky.getSelectedRow();
 
         if (row > -1) {
-
             String name = (String) modelPob.getValueAt(row, PobockaTableModel.name);
             if (core.delPobocku(name)) {
                 showInf("Pobočka bola vymazaná");
@@ -394,27 +850,36 @@ public class BaseForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_pobBtnDelActionPerformed
 
+    /**
+     * Pridanie pobocky
+     *
+     * @param evt
+     */
     private void pobBtnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnAddActionPerformed
 
         String name = pobTxtNazov.getText();
-        if (name.equals("")) {
-
-            showErr("Nezadali ste názov pobočky");
-
-        } else {
-
-            core.addPobocku(name);
+        if (core.addPobocku(name)) {
             refreshTabPoboc();
             pobTxtNazov.setText("");
-
         }
+
 
     }//GEN-LAST:event_pobBtnAddActionPerformed
 
+    /**
+     * Vymzanie konzoly na testovacom tabe
+     *
+     * @param evt
+     */
     private void testBtnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testBtnDeleteActionPerformed
         testAreaVypis.setText("");
     }//GEN-LAST:event_testBtnDeleteActionPerformed
 
+    /**
+     * Testovanie
+     *
+     * @param evt
+     */
     private void testBtnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_testBtnStartActionPerformed
         // TODO add your handling code here:
 
@@ -439,73 +904,313 @@ public class BaseForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_testBtnStartActionPerformed
 
+    /**
+     * Pridanie knihy na pobocku
+     *
+     * @param evt
+     */
     private void pobPridKnihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobPridKnihActionPerformed
 
-        Pobocka pob = getPobocku();
+        String pob = getPobocku();
+        if (!pob.isEmpty()) {
 
-        if (pob != null) {
-
-            dlgKniha dlg = new dlgKniha(this, pob, null);
+            dlgKniha dlg = new dlgKniha(this, core, pob, null);
             dlg.setVisible(true);
 
             if (dlg.result) {
-                refreshTabKniha(pob);
+                refreshTabKniha(core.getKnihOfPobocka(pob));
             }
         }
 
 
     }//GEN-LAST:event_pobPridKnihActionPerformed
 
+    /**
+     * Refreshne tabulku knih podla pobocky
+     *
+     * @param evt
+     */
     private void pobBtnRefreshKnihActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnRefreshKnihActionPerformed
 
-        refreshTabKniha(getPobocku());
+        refreshTabKniha(core.getKnihOfPobocka(getPobocku()));
     }//GEN-LAST:event_pobBtnRefreshKnihActionPerformed
 
+    /**
+     * Ulozenie do suboru
+     *
+     * @param evt
+     */
     private void fileBtnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileBtnSaveActionPerformed
         // TODO add your handling code here:
         core.save();
     }//GEN-LAST:event_fileBtnSaveActionPerformed
 
+    /**
+     * Citanie so suboru
+     *
+     * @param evt
+     */
     private void fileBtnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileBtnLoadActionPerformed
-     
+
         core.loadfromTxt();
         refreshTabPoboc();
-        
+
     }//GEN-LAST:event_fileBtnLoadActionPerformed
 
-    public Pobocka getPobocku() {
+    /**
+     * Prekliknutie medzi tabmi
+     *
+     * @param evt
+     */
+    private void jTabStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabStateChanged
+        switch (jTab.getSelectedIndex()) {
+
+            case 2:
+                refreshTabAllKnih();
+                break;
+
+        }
+    }//GEN-LAST:event_jTabStateChanged
+
+    /**
+     * Obnovenie tabulky so vsetkymi knihami
+     *
+     * @param evt
+     */
+    private void knihBtnRefresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_knihBtnRefresActionPerformed
+        refreshTabAllKnih();
+    }//GEN-LAST:event_knihBtnRefresActionPerformed
+
+    /**
+     * Generator poloziek
+     *
+     * @param evt
+     */
+    private void fileBtnGenerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fileBtnGenerActionPerformed
+
+        int pocPob = Integer.parseInt(nasTxtPocPob.getText());
+        int pocKnih = Integer.parseInt(nasTxtPocKnih.getText());
+        int pocCit = Integer.parseInt(nasTxtPocCit.getText());
+        core.setPocGenPob(pocPob);
+        core.setPocGenKnih(pocKnih);
+        core.setPocGenCit(pocCit);
+
+        Thread tr = new Thread() {
+            public void run() {
+
+                core.generujData();
+                refreshTabPoboc();
+                refreshTabCit();
+
+            }
+
+        };
+
+        tr.start();
+
+
+    }//GEN-LAST:event_fileBtnGenerActionPerformed
+
+    /**
+     * Testovanie posunu v brw
+     *
+     * @param evt
+     */
+    private void pobBtnHladajPobActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnHladajPobActionPerformed
+        String str = pobTxtNazov.getText();
+        refreshTabPoboc(core.findPobockuArray(str));
+
+    }//GEN-LAST:event_pobBtnHladajPobActionPerformed
+
+    /**
+     * Kliknutie na brw
+     *
+     * @param evt
+     */
+    private void tabPobockyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabPobockyMouseClicked
+        if (evt.getClickCount() > 1) {
+
+            showInf(String.valueOf(tabPobocky.getSelectedRow()));
+
+        }
+    }//GEN-LAST:event_tabPobockyMouseClicked
+
+    /**
+     * Pridanie citatela
+     *
+     * @param evt
+     */
+    private void citBtnPridajActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_citBtnPridajActionPerformed
+
+        String name = citTxtMeno.getText();
+        String przv = citTxtPriez.getText();
+        if (core.addCitatela(name, przv)) {
+            refreshTabCit();
+            citTxtMeno.setText("");
+            citTxtPriez.setText("");
+        } else {
+            showErr("Nezadali ste meno alebo priezvisko");
+
+        }
+
+
+    }//GEN-LAST:event_citBtnPridajActionPerformed
+
+    private void pobBtnPozicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnPozicActionPerformed
+
+        String str = JOptionPane.showInputDialog(this, "Zadajte čitatela");
+
+        if (str.isEmpty()) {
+            showErr("Nevyplnili ste číslo čitateľa!");
+        } else {
+            int citatel = Integer.parseInt(str);
+
+            core.urobPozicku(getPobocku(), getNazKnihy(), citatel, dateChooser.getCurrent());
+
+            refreshTabPobPoz();
+        }
+        //core.urobPozicku(null, null, WIDTH);
+    }//GEN-LAST:event_pobBtnPozicActionPerformed
+
+    private void citBtnRefreshDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_citBtnRefreshDownActionPerformed
+
+        switch (citTabPanel.getSelectedIndex()) {
+
+            case 0:
+                refreshTabCitPoz();
+                break;
+            case 1:
+                showInf("Todo");
+                break;
+            case 2:
+                showInf("Todo");
+                break;
+
+        }
+    }//GEN-LAST:event_citBtnRefreshDownActionPerformed
+
+    /**
+     * Btn refresh pobocky
+     * @param evt 
+     */
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        refreshTabPoboc();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    /**
+     * Vrati nazov aktulane oznacenej pobocky
+     *
+     * @return
+     */
+    public String getPobocku() {
 
         int row = tabPobocky.getSelectedRow();
 
         if (row > -1) {
 
             String name = (String) modelPob.getValueAt(row, PobockaTableModel.name);
-            Pobocka pob = core.findPobocku(name);
-            return pob;
+            return name;
+
         } else {
+
             showErr("Nie je vybratá žiadna pobočka");
-            return null;
+            return "";
+
         }
 
     }
 
+    /**
+     * Vrati nazov aktulane oznacenej knihy
+     *
+     * @return
+     */
+    public String getNazKnihy() {
+
+        int row = pobTabKnihy.getSelectedRow();
+
+        if (row > -1) {
+
+            String name = (String) modelKnihy.getValueAt(row, KnihaTableModel.name);
+            return name;
+
+        } else {
+
+            showErr("Nie je vybratá žiadna kniha");
+            return "";
+
+        }
+
+    }
+
+    /**
+     * Vrati id aktulane oznaceneho citatela
+     *
+     * @return
+     */
+    public int getIdCitatela() {
+
+        int row = tableCita.getSelectedRow();
+
+        if (row > -1) {
+
+            int cis = (int) modelCitatel.getValueAt(row, CitatelTableModel.id);
+            return cis;
+
+        } else {
+
+            showErr("Nie je vybratý žiadny čitateľ");
+            return -1;
+
+        }
+
+    }
+
+    /**
+     * Obnovenie tabulky pobociek
+     */
     private void refreshTabPoboc() {
+        refreshTabPoboc(core.getPobocky().getTableRows());
+
+    }
+
+    /**
+     * Obnovenie tabulky
+     *
+     * @param list
+     */
+    private void refreshTabPoboc(ArrayList list) {
         tabPobocky.removeAll();
-        modelPob.setRows(core.getPobocky().getTableRows());
-        tabPobocky.setModel(modelPob);
+        if (list != null) {
+            modelPob.setRows(list);
+            tabPobocky.setModel(modelPob);
+        }
         tabPobocky.repaint();
         tabPobocky.updateUI();
 
     }
 
-    private void refreshTabKniha(Pobocka pob) {
+    private void refreshTabKniha(ArrayList list) {
         pobTabKnihy.removeAll();
-        if (pob != null) {
-            modelKnihy.setRows(pob.getKnihyStr().getTableRows());
+        if (list != null) {
+            modelKnihy.setRows(list);
             pobTabKnihy.setModel(modelKnihy);
         }
         pobTabKnihy.repaint();
         pobTabKnihy.updateUI();
+
+    }
+
+    private void refreshTabAllKnih() {
+        knihTbAll.removeAll();
+        modelAllKnihy.setRows(core.getKnihy().getTableRows());
+        knihTbAll.setModel(modelAllKnihy);
+        knihTbAll.repaint();
+        knihTbAll.updateUI();
 
     }
 
@@ -545,34 +1250,75 @@ public class BaseForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton citBtnDel;
+    private javax.swing.JButton citBtnPridaj;
+    private javax.swing.JButton citBtnRefreshDown;
+    private javax.swing.JTabbedPane citTabPanel;
+    private javax.swing.JTextField citTxtMeno;
+    private javax.swing.JTextField citTxtPriez;
+    private datechooser.beans.DateChooserCombo dateChooser;
+    private javax.swing.JMenuItem fileBtnGener;
     private javax.swing.JMenuItem fileBtnLoad;
     private javax.swing.JMenuItem fileBtnSave;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
+    private javax.swing.JTabbedPane jTab;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JButton knihBtnRefres;
+    private javax.swing.JTable knihTbAll;
+    private javax.swing.JTextField nasTxtPocCit;
+    private javax.swing.JTextField nasTxtPocKnih;
+    private javax.swing.JTextField nasTxtPocPob;
     private javax.swing.JButton pobBtnAdd;
     private javax.swing.JButton pobBtnCount;
     private javax.swing.JButton pobBtnDel;
     private javax.swing.JButton pobBtnDelKnih;
+    private javax.swing.JButton pobBtnHladajPob;
+    private javax.swing.JButton pobBtnPozic;
     private javax.swing.JButton pobBtnRefreshKnih;
     private javax.swing.JButton pobPridKnih;
     private javax.swing.JTable pobTabKnihy;
+    private javax.swing.JTable pobTablPozKnihy;
     private javax.swing.JTextField pobTxtNazov;
     private javax.swing.JTable tabPobocky;
+    private javax.swing.JTable tableAktPozic;
+    private javax.swing.JTable tableCita;
+    private javax.swing.JTable tableHistPozic;
+    private javax.swing.JTable tableOmesPoz;
     private javax.swing.JTextArea testAreaVypis;
     private javax.swing.JButton testBtnDelete;
     private javax.swing.JButton testBtnStart;
@@ -597,4 +1343,106 @@ public class BaseForm extends javax.swing.JFrame {
 
     }
 
+    public String showInput(String msg) {
+        return JOptionPane.showInputDialog(this, msg);
+    }
+
+    public static void scrollToVisible(JTable table, int rowIndex, int vColIndex) {
+        if (!(table.getParent() instanceof JViewport)) {
+            return;
+        }
+        JViewport viewport = (JViewport) table.getParent();
+
+        // This rectangle is relative to the table where the
+        // northwest corner of cell (0,0) is always (0,0).
+        Rectangle rect = table.getCellRect(rowIndex, vColIndex, true);
+
+        // The location of the viewport relative to the table
+        Point pt = viewport.getViewPosition();
+
+        // Translate the cell location so that it is relative
+        // to the view, assuming the northwest corner of the
+        // view is (0,0)
+        rect.setLocation(rect.x - pt.x, rect.y - pt.y);
+
+        table.scrollRectToVisible(rect);
+
+        // Scroll the area into view
+        //viewport.scrollRectToVisible(rect);
+    }
+
+    private void refreshTabCit() {
+        refreshTabCit(core.getCitatelia().getTableRows());
+    }
+
+    /**
+     * Obnovenie tabulky citatel
+     *
+     * @param list
+     */
+    private void refreshTabCit(ArrayList list) {
+        tableCita.removeAll();
+        if (list != null) {
+            modelCitatel.setRows(list);
+            knihTbAll.setModel(modelCitatel);
+        }
+        tableCita.repaint();
+        tableCita.updateUI();
+
+    }
+
+    /**
+     * Tabulka pozicanych knih na pobocke
+     *
+     * @param list
+     */
+    private void refreshTabPobPoz() {
+        pobTablPozKnihy.removeAll();
+
+        modelPozKnihy.setRows(core.getPobPozKnihy(getPobocku()));
+        pobTablPozKnihy.setModel(modelPozKnihy);
+
+        pobTablPozKnihy.repaint();
+        pobTablPozKnihy.updateUI();
+
+    }
+
+    /**
+     * Tabulka pozicanych knih u citatela
+     *
+     * @param list
+     */
+    private void refreshTabCitPoz() {
+
+        refreshTabCitPoz(core.getAktPozOfCitatel(getIdCitatela()));
+
+    }
+
+    /**
+     * Tabulka pozicanych knih u citatela
+     *
+     * @param list
+     */
+    private void refreshTabCitPoz(ArrayList list) {
+        tableAktPozic.removeAll();
+        if (list != null) {
+            modelAktPoz.setRows(list);
+            tableAktPozic.setModel(modelAktPoz);
+        }
+        tableAktPozic.repaint();
+        tableAktPozic.updateUI();
+
+    }
+
+    @Override
+    public void onMessage(Message msg) {
+        String title = msg.getType() == Message.ERROR ? "Chyba" : "Info";
+        JOptionPane.showMessageDialog(this, msg.getMsg(), title, msg.getType());
+    }
+
+    /* posunutie v tabulke
+     tabPobocky.changeSelection(0, 0, false, false);
+     scrollToVisible(tabPobocky, 50, 1);
+     tabPobocky.setRowSelectionInterval(50, 50);
+     */
 }

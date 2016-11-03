@@ -20,8 +20,8 @@ public class PobockaTableModel extends MyTableModel {
     
    
 
-    public PobockaTableModel(ArrayList<Pobocka> rows) {
-        super(rows);
+    public PobockaTableModel() {
+        super();
        
     }
 

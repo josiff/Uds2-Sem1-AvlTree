@@ -5,8 +5,10 @@
  */
 package model;
 
+import avltree.AvlTree;
 import avltree.INode;
-import java.util.Hashtable;
+import avltree.Node;
+import java.util.Calendar;
 
 /**
  *
@@ -17,22 +19,28 @@ public class Citatel implements INode {
     private String meno;
     private String przv;
     private int idCit;
-    private Hashtable<Integer, Kniha> aktPoz;
-    private Hashtable<Integer, Kniha> historia;
-    private Hashtable<Integer, Kniha> oneskorene;
+    private AvlTree aktPoz;
+
+    private boolean blocked;
+    private Calendar dateBlocked;
+    /* private Hashtable<Integer, Kniha> historia
+     private Hashtable<Integer, Kniha> oneskorene;*/
 
     public Citatel() {
 
     }
 
-    Citatel(int idCit) {
+    public Citatel(int idCit) {
         this.idCit = idCit;
     }
 
-    Citatel(int idCit, String meno, String przv) {
+    public Citatel(int idCit, String meno, String przv) {
         this.idCit = idCit;
         this.meno = meno;
         this.przv = przv;
+        blocked = false;
+        dateBlocked = null;
+        aktPoz = new AvlTree();
     }
 
     @Override
@@ -72,28 +80,59 @@ public class Citatel implements INode {
         this.idCit = idCit;
     }
 
-    public Hashtable<Integer, Kniha> getAktPoz() {
+    public AvlTree getAktPoz() {
         return aktPoz;
     }
 
-    public void setAktPoz(Hashtable<Integer, Kniha> aktPoz) {
-        this.aktPoz = aktPoz;
+    @Override
+    public String save() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    public Hashtable<Integer, Kniha> getHistoria() {
-        return historia;
+    /**
+     * Pozicane knihy
+     *
+     * @param kniha
+     * @return
+     */
+    public boolean urobPozicku(Kniha kniha) {
+
+        return aktPoz.insert(new Node(kniha));
+
     }
 
-    public void setHistoria(Hashtable<Integer, Kniha> historia) {
-        this.historia = historia;
+    /**
+     * Vrati priznak ci je pouzivatel bloknuty na poziciavanie
+     *
+     * @param date
+     * @return
+     */
+    public boolean isBlocked(Calendar date) {
+        boolean result = true;
+        Calendar od = dateBlocked;
+        if (od != null) {
+            od.add(Calendar.YEAR, 1);
+            result = od.after(date);
+            //ci je blokunuty a ci nahodou nema block na rok
+        }
+        return blocked && result;
     }
 
-    public Hashtable<Integer, Kniha> getOneskorene() {
-        return oneskorene;
+    public void setBlocked(boolean blocked) {
+        this.blocked = blocked;
     }
 
-    public void setOneskorene(Hashtable<Integer, Kniha> oneskorene) {
-        this.oneskorene = oneskorene;
+    /**
+     * Datum od kedy je blokovany
+     *
+     * @return
+     */
+    public Calendar getDateBlocked() {
+        return dateBlocked;
+    }
+
+    public void setDateBlocked(Calendar dateBlocked) {
+        this.dateBlocked = dateBlocked;
     }
 
 }

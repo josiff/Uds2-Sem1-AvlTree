@@ -5,7 +5,10 @@
  */
 package model;
 
+import avltree.AvlTree;
 import avltree.INode;
+import avltree.Node;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -14,26 +17,39 @@ import java.util.Date;
  */
 public class Kniha implements INode {
 
-    protected String autor;
-    protected String nazovKnihy;
-    protected String isbn;
-    protected int ean;
-    protected String zaner;
-    protected Pobocka pobocka;
-    protected int vypoz; // v dnoch
-    protected double pokuta;
-    protected int id;
-    protected Date odda;
-    protected Date doda;
+    public static String NAME = "model.Kniha";
 
-    public Kniha(String nazovKnihy, int id) {
+    private String autor;
+    private String nazovKnihy;
+    private int isbn;
+    private int ean;
+    private String zaner;
+    private Pobocka pobocka;
+    private int vypoz; // v dnoch
+    private double pokuta;
+    private int id;
+    private Calendar odda;
+    private Calendar doda;
+
+    public Kniha(String nazovKnihy,
+            String autor,
+            int isbn,
+            int ean,
+            String zaner,
+            int id) {
         this.nazovKnihy = nazovKnihy;
+        this.autor = autor;
+        this.isbn = isbn;
+        this.ean = ean;
+        this.zaner = zaner;
+        this.id = id;
+        this.vypoz = 30;
+
+    }
+
+    public Kniha(int id) {
         this.id = id;
     }
-    
-    
-    
-    
 
     public String getAutor() {
         return autor;
@@ -51,11 +67,11 @@ public class Kniha implements INode {
         this.nazovKnihy = nazovKnihy;
     }
 
-    public String getIsbn() {
+    public int getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn(int isbn) {
         this.isbn = isbn;
     }
 
@@ -107,27 +123,46 @@ public class Kniha implements INode {
         this.id = id;
     }
 
-    public Date getOdda() {
+    public Calendar getOdda() {
         return odda;
     }
 
-    public void setOdda(Date odda) {
+    public void setOdda(Calendar odda) {
         this.odda = odda;
     }
 
-    public Date getDoda() {
+    public Calendar getDoda() {
         return doda;
     }
 
-    public void setDoda(Date doda) {
+    public void setDoda(Calendar doda) {
         this.doda = doda;
     }
 
     @Override
     public int compare(INode paData) {
-        return 0;
+        Kniha knih = (Kniha) paData;
+
+        if (this.getId() < knih.getId()) {
+            return -1;
+
+        } else if (this.getId() > knih.getId()) {
+            return 1;
+        } else {
+            return 0;
+        }
     }
 
-   
+    public void rezervuj(Calendar calendar) {
+        odda = calendar;
+        doda = Calendar.getInstance();
+        doda.setTime(calendar.getTime());
+        doda.add(Calendar.DATE, vypoz);
+    }
+
+    @Override
+    public String save() {
+        return "";
+    }
 
 }

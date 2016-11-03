@@ -11,25 +11,51 @@ import avltree.INode;
  *
  * @author Jožko
  */
-public class KnihaStr extends Kniha{
+public class KnihaStr implements INode {
 
-    public KnihaStr(String nazovKnihy, int id) {
-        super(nazovKnihy, id);
+    private Kniha kniha;
+    private String nazov;
+   
+    public KnihaStr(String nazov) {
+        this.nazov = nazov;
     }
 
     public KnihaStr(Kniha kniha) {
-        super(kniha.getNazovKnihy(), kniha.getId());
+        this.kniha = kniha;
+        this.nazov = kniha.getNazovKnihy();
+       
     }
-    
-    
 
     @Override
     public int compare(INode paData) {
         KnihaStr knih = (KnihaStr) paData;
-        
-        return this.nazovKnihy.compareTo(knih.getNazovKnihy());
-        
-        
+
+        return this.getNazov().compareTo(knih.getNazov());
+
     }
+
+    @Override
+    public String save() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Kniha getKniha() {
+        return kniha;
+    }
+
+    public void setKniha(Kniha kniha) {
+        this.kniha = kniha;
+    }
+
+    public String getNazov() {
+        return nazov;
+    }
+
+    public void setNazov(String nazov) {
+        this.nazov = nazov;
+    }
+
+   
     
+
 }

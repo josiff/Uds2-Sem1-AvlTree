@@ -5,6 +5,7 @@
  */
 package gui;
 
+import system.Core;
 import model.Kniha;
 import model.Pobocka;
 
@@ -13,10 +14,10 @@ import model.Pobocka;
  * @author Jožko
  */
 public class dlgKniha extends javax.swing.JDialog {
-    
-    
-    private Pobocka pobocka;
+
+    private String pobocka;
     private Kniha kniha;
+    private Core core;
     public boolean result = false;
 
     /**
@@ -27,23 +28,19 @@ public class dlgKniha extends javax.swing.JDialog {
         initComponents();
     }
 
-    public dlgKniha(java.awt.Frame parent, Pobocka pob, Kniha knih) {
-        
+    public dlgKniha(java.awt.Frame parent, Core core, String pob, Kniha knih) {
+
         super(parent, true);
         initComponents();
         this.pobocka = pob;
         this.kniha = knih;
-        
-        if(this.kniha != null){
+        this.core = core;
+
+        if (this.kniha != null) {
             iniWdgts();
         }
-        
+
     }
-    
-    
-    
-    
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -91,11 +88,17 @@ public class dlgKniha extends javax.swing.JDialog {
 
         jLabel3.setText("ISBN");
 
+        txtISBN.setText("1");
+
         jLabel4.setText("EAN");
+
+        txtEAN.setText("0");
 
         jLabel5.setText("Žáner");
 
         jLabel6.setText("ID");
+
+        txtId.setEditable(false);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -155,9 +158,9 @@ public class dlgKniha extends javax.swing.JDialog {
                     .addComponent(jLabel4)
                     .addComponent(txtEAN, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(txtZaner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(txtZaner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnStorno)
@@ -169,13 +172,18 @@ public class dlgKniha extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOkActionPerformed
-       
+
         result = true;
-        pobocka.addKnihu(txtNazov.getText());
+        core.addKnihu(txtNazov.getText(),
+                txtAutor.getText(),
+                Integer.valueOf(txtISBN.getText()),
+                Integer.valueOf(txtEAN.getText()),
+                txtZaner.getText(),
+                pobocka);
+        /*pobocka.addKnihu(txtNazov.getText());*/
         this.dispose();
-        
-        
-        
+
+
     }//GEN-LAST:event_btnOkActionPerformed
 
     private void btnStornoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStornoActionPerformed
@@ -246,7 +254,7 @@ public class dlgKniha extends javax.swing.JDialog {
         txtId.setText("1");
         txtAutor.setText(kniha.getAutor());
         txtNazov.setText(kniha.getNazovKnihy());
-        txtISBN.setText(kniha.getIsbn());
+        txtISBN.setText(String.valueOf(kniha.getIsbn()));
         txtEAN.setText(String.valueOf(kniha.getEan()));
         txtZaner.setText(kniha.getZaner());
     }

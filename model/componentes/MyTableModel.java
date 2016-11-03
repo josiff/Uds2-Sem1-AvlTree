@@ -1,6 +1,6 @@
 package model.componentes;
 
-
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -17,6 +17,13 @@ import javax.swing.table.TableModel;
 public abstract class MyTableModel implements TableModel {
 
     protected ArrayList<?> rows;
+    protected SimpleDateFormat dateFormat;
+
+    public MyTableModel() {
+        rows = new ArrayList<>();
+        dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+
+    }
 
     public MyTableModel(ArrayList<?> rows) {
         this.rows = rows;
@@ -51,7 +58,5 @@ public abstract class MyTableModel implements TableModel {
     public void setRows(ArrayList<?> rows) {
         this.rows = rows;
     }
-    
-    
 
 }
