@@ -41,6 +41,7 @@ public class Core {
     private Message msg;
 
     private int pocGenPob, pocGenKnih, pocGenCit;
+    private int pocNasledovnikov;
 
     private int knihaSeq, citSeq;
 
@@ -58,6 +59,7 @@ public class Core {
         pocGenKnih = 10;
         pocGenPob = 5;
         pocGenCit = 10;
+        pocNasledovnikov = 5;
     }
 
     public void addMsgListener(IMessage imsg) {
@@ -264,7 +266,7 @@ public class Core {
             return null;
         }
 
-        return pob.findKnihuArray(kniha);
+        return pob.findKnihuArray(kniha, pocNasledovnikov);
 
     }
 
@@ -531,5 +533,15 @@ public class Core {
         msg.setMsg(text);
         showMsg(msg);
     }
+
+    public int getPocNasledovnikov() {
+        return pocNasledovnikov;
+    }
+
+    public void setPocNasledovnikov(int pocNasledovnikov) {
+        this.pocNasledovnikov = pocNasledovnikov;
+    }
+    
+    
 
 }

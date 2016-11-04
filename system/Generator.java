@@ -31,7 +31,7 @@ public class Generator {
 
     public void generujData(Core ct, int pocPob, int pocKnih, int pocCit) {
 
-        for (int i = 0; i < pocPob; i++) {
+       /* for (int i = 0; i < pocPob; i++) {
             String str = randomString(CHAR_LENGTH);
             // ct.addPobocku(str);
             Pobocka pob = new Pobocka(str);
@@ -42,7 +42,25 @@ public class Generator {
                         generIsbn(), generIsbn(), randomString(CHAR_LENGTH), pob);
             }
 
-        }
+        }*/
+        
+        
+        Pobocka pb = new Pobocka("Bolesov");
+        ct.getPobocky().insert(new Node(pb));
+        ct.addKnihu("Trubicka", "a", 0, 1, "ee", pb);
+        ct.addKnihu("Azbest", "a", 0, 1, "ee", pb);
+        ct.addKnihu("Notebuk", "a", 0, 1, "ee", pb);
+        ct.addKnihu("Televizok", "a", 0, 1, "ee", pb);
+        ct.addKnihu("Janko", "a", 0, 1, "ee", pb);
+        ct.addKnihu("Marienka", "a", 0, 1, "ee", pb);
+        ct.addKnihu("Iphone", "a", 0, 1, "ee", pb);
+        ct.addKnihu("Guru", "a", 0, 1, "ee", pb);
+        ct.addKnihu("Pero", "a", 0, 1, "ee", pb);
+        
+        
+        
+        
+        
 
         for (int i = 0; i < pocCit; i++) {
             ct.addCitatela(randomString(CHAR_LENGTH), randomString(CHAR_LENGTH));

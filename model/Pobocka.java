@@ -143,22 +143,22 @@ public class Pobocka implements INode {
 
     /**
      * Nájde knihu podľa nazvu
+     *
      * @param nazov
-     * @return 
+     * @param pocet kolko nasledovnikov chcem vidiet
+     * @return
      */
-    public ArrayList findKnihuArray(String nazov) {
+    public ArrayList findKnihuArray(String nazov, int pocet) {
 
-        ArrayList list = new ArrayList();
         if (nazov.isEmpty()) {
             return null;
         }
 
-        Kniha kn = findKnihu(nazov);
-        if (kn != null) {
-            list.add(kn);
-        }
-
-        return list;
+        /*Kniha kn = findKnihu(nazov);
+         if (kn != null) {
+         list.add(kn);
+         }*/
+        return knihyStr.inOrderMatch(new Node(new KnihaStr(nazov)), pocet);
 
     }
 

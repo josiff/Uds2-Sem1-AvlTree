@@ -173,6 +173,8 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         jLabel8 = new javax.swing.JLabel();
         nasTxtPocCit = new javax.swing.JTextField();
         nastBtnReset = new javax.swing.JButton();
+        jLabel9 = new javax.swing.JLabel();
+        nasTxtPocNasled = new javax.swing.JTextField();
         dateChooser = new datechooser.beans.DateChooserCombo();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
@@ -767,13 +769,27 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             }
         });
 
+        jLabel9.setText("Počet nasledovnikov");
+
+        nasTxtPocNasled.setText("5");
+        nasTxtPocNasled.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                nasTxtPocNasledFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
                 .addGap(28, 28, 28)
-                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(18, 18, 18)
+                        .addComponent(nasTxtPocNasled))
+                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 386, Short.MAX_VALUE)
                 .addComponent(nastBtnReset)
                 .addContainerGap())
@@ -785,7 +801,11 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(nastBtnReset)
                     .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(473, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(nasTxtPocNasled, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(435, Short.MAX_VALUE))
         );
 
         jTab.addTab("Nastavenia", jPanel10);
@@ -1177,6 +1197,15 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
+     * Nastavenie kolko nasledovnikov sa ma vypisat
+     * @param evt 
+     */
+    private void nasTxtPocNasledFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_nasTxtPocNasledFocusLost
+        String str = nasTxtPocNasled.getText();
+        core.setPocNasledovnikov(Integer.parseInt(str));
+    }//GEN-LAST:event_nasTxtPocNasledFocusLost
+
+    /**
      * Vrati nazov aktulane oznacenej pobocky
      *
      * @return
@@ -1372,6 +1401,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuBar jMenuBar1;
@@ -1403,6 +1433,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private javax.swing.JTable knihTbAll;
     private javax.swing.JTextField nasTxtPocCit;
     private javax.swing.JTextField nasTxtPocKnih;
+    private javax.swing.JTextField nasTxtPocNasled;
     private javax.swing.JTextField nasTxtPocPob;
     private javax.swing.JButton nastBtnReset;
     private javax.swing.JButton pobBtnAdd;

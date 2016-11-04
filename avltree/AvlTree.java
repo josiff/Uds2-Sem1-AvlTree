@@ -359,15 +359,137 @@ public class AvlTree {
         return list;
 
     }
-    
+
+    /**
+     * InOrder prehliadka ak nenajde vrati nasledujuce vrcholy
+     *
+     * @param paNode
+     * @param pocet - kolko nasledujucich ma pridat
+     * @return
+     */
+    public ArrayList inOrderMatch(Node paNode, int pocet) {
+        ArrayList<INode> list = new ArrayList<>();
+
+        Node node = root;
+        if (node != null) {
+
+            boolean flag = false;
+            int cis = 0;
+            cis = ((INode) paNode.getData()).compare(node.getData());
+            while (flag == false) {
+
+                if (cis == 0) {
+                    flag = true;
+                    list.add(node.getData());
+                    return list;
+
+                } else if (cis < 0) {
+                    if (node.getLeft() == null) {
+                        flag = true;
+                    } else {
+                        node = node.getLeft();
+                    }
+                } else if (cis > 0) {
+                    if (node.getRight() == null) {
+                        flag = true;
+
+                    } else {
+                        node = node.getRight();
+                    }
+                }
+
+                cis = ((INode) paNode.getData()).compare(node.getData());
+            }
+
+            Node right = null;
+
+            if (cis < 0) {
+                if (node != null) {
+                    list.add(node.getData());
+                }
+
+            }
+
+            //kym nie dostatocny pocet alebo kym nie null
+            while (list.size() < pocet && node != null) {
+                if (node.getParent() != null) {
+                    cis = ((INode) node.getParent().getData()).compare(node.getData());
+                    if (cis < 0) {
+                        node = node.getParent();
+
+                    } else {
+
+                        node = node.getParent();
+                        list.add(node.getData());
+                        right = node.getRight();
+
+                        if (right != null) {
+                            if (list.size() < pocet) {
+                                list = inOrder(right, list, pocet);
+                            }
+                        }
+                    }
+                } else {
+                    node = null;
+                }
+            }
+
+        }
+        return list;
+    }
+
+    /**
+     * In order od vrchola
+     *
+     * @param paNode
+     * @param list
+     * @return
+     */
+    public ArrayList inOrder(Node paNode, ArrayList list, int pocet) {
+
+        if (paNode == null) {
+            return list;
+        }
+
+        int count = 0;
+        Stack<Node> stack = new Stack<Node>();
+
+        while (!stack.isEmpty() || paNode != null) {
+
+            if (paNode != null) {
+                stack.push(paNode);
+                paNode = paNode.getLeft();
+            } else {
+                Node n = stack.pop();
+                list.add(n.getData());
+                count++;
+                //System.out.printf("%s, %n", n.toString());
+                paNode = n.getRight();
+                /**
+                 * ak som dosiahol pocet tak to stopnem
+                 */
+                if (list.size() >= pocet) {
+                    paNode = null;
+                    stack.removeAllElements();
+
+                }
+
+            }
+
+        }
+        return list;
+
+    }
+
     /**
      * Vrati array list pre Table
-     * @return 
+     *
+     * @return
      */
-    public ArrayList getTableRows(){
-        
+    public ArrayList getTableRows() {
+
         return inOrder(root);
-    
+
     }
 
     public Node getRoot() {
@@ -376,6 +498,22 @@ public class AvlTree {
 
     public int getCount() {
         return count;
+    }
+
+    /**
+     * Vrati deda
+     *
+     * @param paNode
+     * @return
+     */
+    public Node getGratParent(Node paNode) {
+        if (paNode.getParent() == null) {
+
+            return null;
+        }
+        paNode = paNode.getParent();
+
+        return paNode.getParent();
     }
 
 }

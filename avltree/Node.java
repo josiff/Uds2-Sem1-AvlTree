@@ -18,7 +18,7 @@ public class Node {
     public Node() {
         this.height = 0;
     }
-    
+
     public Node(INode paNode) {
         this.height = 0;
         this.data = paNode;
@@ -93,19 +93,19 @@ public class Node {
         }
 
     }
-/*
-    protected int compare(Node paNode) {
+    /*
+     protected int compare(Node paNode) {
 
-        return 0;
-    }
+     return 0;
+     }
 
-    protected void setData(Node paNode) {
-    }*/
+     protected void setData(Node paNode) {
+     }*/
 
     @Override
     public String toString() {
         String txt = this.parent == null ? "root " : "";
-        return    txt +   "Vyska: " + this.height;
+        return txt + "Vyska: " + this.height;
 
     }
 
@@ -116,8 +116,7 @@ public class Node {
     public void setData(INode data) {
         this.data = data;
     }
-    
-    
+
     
 
 }
