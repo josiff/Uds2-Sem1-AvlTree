@@ -18,6 +18,7 @@ public class CitatelTableModel extends MyTableModel {
     public final static int id = 0;
     public final static int meno = 1;
     public final static int priz = 2;
+    public final static int blocked = 3;
 
     public CitatelTableModel() {
         super();
@@ -31,7 +32,7 @@ public class CitatelTableModel extends MyTableModel {
 
     @Override
     public int getColumnCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -43,6 +44,8 @@ public class CitatelTableModel extends MyTableModel {
                 return "Meno";
             case priz:
                 return "Priezvisko";
+            case blocked:
+                return "Dátum blokovania";
 
         }
         return null;
@@ -60,6 +63,8 @@ public class CitatelTableModel extends MyTableModel {
                 return citatel.getMeno();
             case priz:
                 return citatel.getPrzv();
+            case blocked:
+                return citatel.getDateBlocked() == null ? "" : citatel.getDateBlocked();
 
         }
         return null;

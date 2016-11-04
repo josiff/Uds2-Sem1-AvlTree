@@ -500,20 +500,6 @@ public class AvlTree {
         return count;
     }
 
-    /**
-     * Vrati deda
-     *
-     * @param paNode
-     * @return
-     */
-    public Node getGratParent(Node paNode) {
-        if (paNode.getParent() == null) {
-
-            return null;
-        }
-        paNode = paNode.getParent();
-
-        return paNode.getParent();
-    }
+   
 
 }

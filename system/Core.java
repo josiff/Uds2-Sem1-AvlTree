@@ -199,6 +199,22 @@ public class Core {
     }
 
     /**
+     * Najde citatela podla id cisla
+     *
+     * @param idCit
+     * @return
+     */
+    public ArrayList findCitatelArray(int idCit) {
+        ArrayList list = new ArrayList();
+        Citatel cit = findCitatel(idCit);
+        if (cit == null) {
+            return null;
+        }
+        list.add(cit);
+        return list;
+    }
+
+    /**
      * Vymazanie citatela
      *
      * @param idCit
@@ -449,7 +465,10 @@ public class Core {
             setErrMsg("Čitateľ " + citatel + " má momentálne blokované požičiavanie!");
             return;
         }
-        kn.rezervuj(calendar);
+        //musim vytvorit novu instanciu inak by sa to odkazovalo na hlavny cas
+        Calendar odda = Calendar.getInstance();
+        odda.setTime(calendar.getTime());
+        kn.rezervuj(odda);
         pob.urobPozicku(kn);
         cit.urobPozicku(kn);
 
@@ -541,7 +560,12 @@ public class Core {
     public void setPocNasledovnikov(int pocNasledovnikov) {
         this.pocNasledovnikov = pocNasledovnikov;
     }
-    
-    
+
+    public ArrayList getDelayPozKnih(String pobocka, Calendar datum) {
+
+        Pobocka pob = findPobocku(pobocka);
+        return pob.getDelayPozKnih(datum);
+
+    }
 
 }

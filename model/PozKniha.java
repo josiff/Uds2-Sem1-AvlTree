@@ -5,6 +5,7 @@
  */
 package model;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -13,28 +14,30 @@ import java.util.Date;
  */
 public class PozKniha {
 
-    private Date odda, doda;
+    private Calendar odda, doda;
+    private Calendar koniec;  //kedy bol skutocny datum vratenia
     private Kniha kniha;
 
-    public PozKniha(Kniha kniha, Date odda, Date doda) {
+    public PozKniha(Kniha kniha, Calendar aktDatum) {
         this.kniha = kniha;
-        this.odda = odda;
-        this.doda = doda;
+        this.odda = kniha.getOdda();
+        this.doda = kniha.getDoda();
+        this.koniec = aktDatum;
     }
 
-    public Date getOdda() {
+    public Calendar getOdda() {
         return odda;
     }
 
-    public void setOdda(Date odda) {
+    public void setOdda(Calendar odda) {
         this.odda = odda;
     }
 
-    public Date getDoda() {
+    public Calendar getDoda() {
         return doda;
     }
 
-    public void setDoda(Date doda) {
+    public void setDoda(Calendar doda) {
         this.doda = doda;
     }
 
@@ -45,13 +48,5 @@ public class PozKniha {
     public void setKniha(Kniha kniha) {
         this.kniha = kniha;
     }
-    
-    
-    
-    
-    
-    
-    
-    
 
 }

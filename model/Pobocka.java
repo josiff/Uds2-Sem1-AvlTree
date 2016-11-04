@@ -9,6 +9,8 @@ import avltree.AvlTree;
 import avltree.INode;
 import avltree.Node;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Stack;
 
 /**
  *
@@ -176,6 +178,40 @@ public class Pobocka implements INode {
 
     public AvlTree getPozKnihy() {
         return pozKnihy;
+    }
+
+    public ArrayList getDelayPozKnih(Calendar datum) {
+
+        ArrayList<KnihaStr> list = new ArrayList<>();
+        Node root = pozKnihy.getRoot();
+        if (root == null) {
+            return list;
+        }
+
+        Stack<Node> stack = new Stack<Node>();
+
+        while (!stack.isEmpty() || root != null) {
+
+            if (root != null) {
+                stack.push(root);
+                root = root.getLeft();
+            } else {
+                Node n = stack.pop();
+                KnihaStr knih = (KnihaStr) n.getData();
+                Calendar doda = knih.getKniha().getDoda();
+                if (doda != null) {
+
+                    if (doda.before(datum)) {
+                        list.add(knih);
+                    }
+                }
+                //System.out.printf("%s, %n", n.toString());
+                root = n.getRight();
+            }
+
+        }
+        return list;
+
     }
 
 }
