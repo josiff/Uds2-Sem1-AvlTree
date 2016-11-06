@@ -1205,7 +1205,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                 refreshTabCitHistory();
                 break;
             case 2:
-                showInf("Todo");
+                refreshTabCitOmeskan();
                 break;
 
         }
@@ -1310,6 +1310,8 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         String nazov = showInput("Zadajte nazov pobocky");
         core.vratKnihu(getIdKnihyAll(), nazov, dateChooser.getCurrent());
+        //refreshTabCitPoz();
+        refreshTabKniha();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
@@ -1735,6 +1737,26 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         tableHistPozic.updateUI();
 
     }
+    
+    
+    /**
+     * Tabulka pozicanych knih u citatela
+     *
+     * @param list
+     */
+    private void refreshTabCitOmeskan() {
+        tableOmesPoz.removeAll();
+
+        modelOmesPoz.setRows(core.getCitOmeskania(getIdCitatela()));
+        tableOmesPoz.setModel(modelOmesPoz);
+
+        tableOmesPoz.repaint();
+        tableOmesPoz.updateUI();
+
+    }
+    
+    
+    
 
     @Override
     public void onMessage(Message msg) {

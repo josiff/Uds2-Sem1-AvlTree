@@ -38,10 +38,11 @@ public class Pobocka implements INode {
      */
     public boolean addKnihu(Kniha kniha) {
 
-        kniha.setKnihaStr(new KnihaStr(kniha));
+        KnihaStr kStr = new KnihaStr(kniha); 
+        kniha.setKnihaStr(kStr);
         kniha.setPobocka(this);
         knihyInt.insert(new Node(kniha));
-        knihyStr.insert(new Node(kniha.getKnihaStr()));
+        knihyStr.insert(new Node(kStr));
 
         return true;
 

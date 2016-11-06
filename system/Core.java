@@ -657,8 +657,7 @@ public class Core {
             // cena plus ina pobocka
             //nastavim novu pobocku
             //vymazavanie knihy na pobocke  a z celeho zoznamu           
-            kn.getPobocka().vymazKnihu(kn);
-            kn.setPobocka(pob);
+            kn.getPobocka().vymazKnihu(kn);            
             pob.addKnihu(kn);
 
         }
@@ -683,6 +682,26 @@ public class Core {
         }
 
         return new ArrayList(cit.getHistoria());
+
+    }
+    
+    
+     /**
+     * Vrati omeskania ciatela
+     *
+     * @param citatel
+     * @return
+     */
+    public ArrayList getCitOmeskania(int citatel) {
+        Citatel cit = findCitatel(citatel);
+
+        if (cit == null) {
+            setErrMsg("Čitatel " + String.valueOf(citatel) + " sa nenašiel");
+            return null;
+
+        }
+
+        return new ArrayList(cit.getOneskorenia());
 
     }
 
