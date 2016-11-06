@@ -30,6 +30,8 @@ public class Kniha implements INode {
     private int id;
     private Calendar odda;
     private Calendar doda;
+    private Citatel citatel;
+    private KnihaStr knihaStr;
 
     public Kniha(String nazovKnihy,
             String autor,
@@ -164,5 +166,34 @@ public class Kniha implements INode {
     public String save() {
         return "";
     }
+
+    public Citatel getCitatel() {
+        return citatel;
+    }
+
+    public void setCitatel(Citatel citatel) {
+        this.citatel = citatel;
+    }
+
+    /**
+     * Vrati ci je kniha pozicana
+     * @return 
+     */
+    public boolean isPozicana() {
+
+        return odda != null && doda != null;
+
+    }
+
+    public KnihaStr getKnihaStr() {
+        return knihaStr;
+    }
+
+    public void setKnihaStr(KnihaStr knihaStr) {
+        this.knihaStr = knihaStr;
+    }
+    
+    
+    
 
 }

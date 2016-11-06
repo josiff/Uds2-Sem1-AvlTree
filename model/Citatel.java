@@ -9,6 +9,7 @@ import avltree.AvlTree;
 import avltree.INode;
 import avltree.Node;
 import java.util.Calendar;
+import java.util.LinkedList;
 
 /**
  *
@@ -23,8 +24,8 @@ public class Citatel implements INode {
 
     private boolean blocked;
     private Calendar dateBlocked;
-    /* private Hashtable<Integer, Kniha> historia
-     private Hashtable<Integer, Kniha> oneskorene;*/
+    private LinkedList<PozKniha> oneskorenia;
+    private LinkedList<PozKniha> historia;
 
     public Citatel() {
 
@@ -41,6 +42,8 @@ public class Citatel implements INode {
         blocked = false;
         dateBlocked = null;
         aktPoz = new AvlTree();
+        oneskorenia = new LinkedList<>();
+        historia = new LinkedList<>();
     }
 
     @Override
@@ -102,6 +105,26 @@ public class Citatel implements INode {
     }
 
     /**
+     * Vymazanie knihy
+     *
+     * @param kniha
+     * @param datum
+     * @return
+     */
+    public void vratKnihu(Kniha kniha, Calendar datum) {
+
+        PozKniha pozkniha = new PozKniha(kniha, datum);
+        aktPoz.remove(new Node(kniha));
+        if (pozkniha.getDays() > 0) {
+            // ak som vratil neskoro tak
+            oneskorenia.add(pozkniha);
+        
+        }
+        historia.add(pozkniha);
+
+    }
+
+    /**
      * Vrati priznak ci je pouzivatel bloknuty na poziciavanie
      *
      * @param date
@@ -135,4 +158,22 @@ public class Citatel implements INode {
         this.dateBlocked = dateBlocked;
     }
 
+    public LinkedList<PozKniha> getOneskorenia() {
+        return oneskorenia;
+    }
+
+    public void setOneskorenia(LinkedList<PozKniha> oneskorenia) {
+        this.oneskorenia = oneskorenia;
+    }
+
+    public LinkedList<PozKniha> getHistoria() {
+        return historia;
+    }
+
+    public void setHistoria(LinkedList<PozKniha> historia) {
+        this.historia = historia;
+    }
+
+    
+    
 }

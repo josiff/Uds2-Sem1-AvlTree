@@ -38,8 +38,10 @@ public class Pobocka implements INode {
      */
     public boolean addKnihu(Kniha kniha) {
 
+        kniha.setKnihaStr(new KnihaStr(kniha));
+        kniha.setPobocka(this);
         knihyInt.insert(new Node(kniha));
-        knihyStr.insert(new Node(new KnihaStr(kniha)));
+        knihyStr.insert(new Node(kniha.getKnihaStr()));
 
         return true;
 
@@ -175,6 +177,21 @@ public class Pobocka implements INode {
         return pozKnihy.insert(new Node(new KnihaStr(kniha)));
 
     }
+    
+    
+    /**
+     * Vymazanie pozicanej knihy
+     *
+     * @param kniha
+     * @return
+     */
+    public boolean vymazPozicku(Kniha kniha) {
+
+        return pozKnihy.remove(new Node(new KnihaStr(kniha)));
+
+    }
+    
+    
 
     public AvlTree getPozKnihy() {
         return pozKnihy;
@@ -213,5 +230,23 @@ public class Pobocka implements INode {
         return list;
 
     }
+
+    /**
+     * Vymazanie knihy
+     * @param kniha
+     */
+    public void vymazKnihu(Kniha kniha) {
+
+        KnihaStr knihaStr = kniha.getKnihaStr();
+        kniha.setKnihaStr(null);
+        kniha.setPobocka(null);
+        knihyInt.remove(new Node(kniha));
+        knihaStr.setKniha(null);
+        knihyStr.remove(new Node(knihaStr));
+
+    }
+    
+    
+    
 
 }

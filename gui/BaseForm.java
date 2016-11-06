@@ -17,6 +17,7 @@ import model.componentes.CitatelTableModel;
 import model.componentes.KnihaTableModel;
 import model.componentes.PobockaTableModel;
 import model.componentes.MyTableModel;
+import model.componentes.PozKnihaTableModel;
 import system.IMessage;
 import system.Message;
 import test.Test;
@@ -78,12 +79,12 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         tableAktPozic.setRowSelectionAllowed(true);
         tableAktPozic.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        modelHistPoz = new KnihaTableModel();
+        modelHistPoz = new PozKnihaTableModel();
         tableHistPozic.setModel(modelHistPoz);
         tableHistPozic.setRowSelectionAllowed(true);
         tableHistPozic.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        modelOmesPoz = new KnihaTableModel();
+        modelOmesPoz = new PozKnihaTableModel();
         tableOmesPoz.setModel(modelOmesPoz);
         tableOmesPoz.setRowSelectionAllowed(true);
         tableOmesPoz.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -145,6 +146,9 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         jScrollPane4 = new javax.swing.JScrollPane();
         knihTbAll = new javax.swing.JTable();
         knihBtnRefres = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        knTxtHladaj = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         citTabPanel = new javax.swing.JTabbedPane();
         jPanel7 = new javax.swing.JPanel();
@@ -539,13 +543,33 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             }
         });
 
+        jButton7.setText("Vráť knihu");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("Hladaj");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 692, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(knTxtHladaj, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(knihBtnRefres)
                 .addContainerGap())
         );
@@ -553,7 +577,11 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(knihBtnRefres)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(knihBtnRefres)
+                    .addComponent(jButton7)
+                    .addComponent(jButton8)
+                    .addComponent(knTxtHladaj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(114, Short.MAX_VALUE))
@@ -1174,7 +1202,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                 refreshTabCitPoz();
                 break;
             case 1:
-                showInf("Todo");
+                refreshTabCitHistory();
                 break;
             case 2:
                 showInf("Todo");
@@ -1267,6 +1295,23 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         refreshTabPobPoz(core.getDelayPozKnih(getPobocku(), dateChooser.getCurrent()));
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+
+        String txt = knTxtHladaj.getText();
+        if (txt.isEmpty()) {
+
+            showErr("Nevyplnili ste id knihy!");
+            return;
+        }
+        int id = Integer.parseInt(txt);
+        refreshTabAllKnih(core.findKnihuAllArray(id));
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        String nazov = showInput("Zadajte nazov pobocky");
+        core.vratKnihu(getIdKnihyAll(), nazov, dateChooser.getCurrent());
+    }//GEN-LAST:event_jButton7ActionPerformed
+
     /**
      * Vrati nazov aktulane oznacenej pobocky
      *
@@ -1308,6 +1353,29 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
 
             showErr("Nie je vybratá žiadna kniha");
             return "";
+
+        }
+
+    }
+
+    /**
+     * Vrati nazov aktulane oznacenej knihy
+     *
+     * @return
+     */
+    public int getIdKnihyAll() {
+
+        int row = knihTbAll.getSelectedRow();
+
+        if (row > -1) {
+
+            int name = (int) modelAllKnihy.getValueAt(row, KnihaTableModel.id);
+            return name;
+
+        } else {
+
+            showErr("Nie je vybratá žiadna kniha");
+            return -1;
 
         }
 
@@ -1459,6 +1527,8 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1495,6 +1565,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTab;
     private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTextField knTxtHladaj;
     private javax.swing.JButton knihBtnRefres;
     private javax.swing.JTable knihTbAll;
     private javax.swing.JTextField nasTxtPocCit;
@@ -1646,6 +1717,22 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         }
         tableAktPozic.repaint();
         tableAktPozic.updateUI();
+
+    }
+
+    /**
+     * Tabulka pozicanych knih u citatela
+     *
+     * @param list
+     */
+    private void refreshTabCitHistory() {
+        tableHistPozic.removeAll();
+
+        modelHistPoz.setRows(core.getCitHistry(getIdCitatela()));
+        tableAktPozic.setModel(modelHistPoz);
+
+        tableHistPozic.repaint();
+        tableHistPozic.updateUI();
 
     }
 

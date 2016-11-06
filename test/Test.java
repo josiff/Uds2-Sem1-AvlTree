@@ -12,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-
-
 /**
  *
  * @author Jožko
@@ -26,8 +24,6 @@ public class Test {
     private int pocOperaci;
     private double parvInsert;
 
-   
-
     private Random rnd;
     private Random rndOper;
 
@@ -36,7 +32,6 @@ public class Test {
         this.items = new ArrayList<>();
         this.rnd = new Random();
         this.rndOper = new Random();
-        
 
         pocet = 0;
 
@@ -55,27 +50,38 @@ public class Test {
          }
 
          vypis();*/
-        for (int i = 0; i < 0; i++) {
-            insert();
+        /*
+         for (int i = 0; i < 0; i++) {
+         insert();
 
-        }
-        //vypis();
+         }
+         //vypis();
 
-        double cis = 0.0;
+         double cis = 0.0;
 
-        for (int i = 0; i < getPocOperaci(); i++) {
-            cis = rndOper.nextDouble();
-            if (cis < getParvInsert()) {
+         for (int i = 0; i < getPocOperaci(); i++) {
+         cis = rndOper.nextDouble();
+         if (cis < getParvInsert()) {
 
-                remove();
-                //remove++;
-            } else {
-                insert();
-                //add++;
-            }
-        }
-       
+         remove();
+         //remove++;
+         } else {
+         insert();
+         //add++;
+         }
+         }
+         */
         // vypis();
+        insert(8);
+        insert(5);
+        insert(9);
+        insert(3);
+        insert(6);
+        write(tree.getRoot());
+        remove(5);
+        System.out.println("----------------------");
+        write(tree.getRoot());
+
     }
 
     private void insert() {
@@ -169,13 +175,39 @@ public class Test {
             } else {
                 Node n = stack.pop();
                 count++;
-                // System.out.printf("%s, %n", n.toString());
+                System.out.printf("%s, %n", n.toString());
                 root = n.getRight();
             }
 
         }
 
         return count;
+
+    }
+
+    public void write(Node root) {
+        if (root == null) {
+            return;
+        }
+
+        int count = 0;
+
+        Stack<Node> stack = new Stack<Node>();
+
+        while (!stack.isEmpty() || root != null) {
+
+            if (root != null) {
+                stack.push(root);
+                root = root.getLeft();
+            } else {
+                Node n = stack.pop();
+                Cislo c = (Cislo)n.getData();
+                count++;
+                System.out.println(c.getKey());
+                root = n.getRight();
+            }
+
+        }
 
     }
 
@@ -213,7 +245,5 @@ public class Test {
     public void setParvInsert(double parvInsert) {
         this.parvInsert = parvInsert;
     }
-
-  
 
 }

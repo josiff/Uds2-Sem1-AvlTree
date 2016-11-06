@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import model.Citatel;
 import model.Kniha;
 import model.Pobocka;
+import model.PozKniha;
 
 /**
  *
@@ -42,6 +43,8 @@ public class Core {
 
     private int pocGenPob, pocGenKnih, pocGenCit;
     private int pocNasledovnikov;
+
+    private double priplatokVratenia = 15;
 
     private int knihaSeq, citSeq;
 
@@ -465,10 +468,13 @@ public class Core {
             setErrMsg("Čitateľ " + citatel + " má momentálne blokované požičiavanie!");
             return;
         }
+
+        //todo kontrola na meskanie s vratenim
         //musim vytvorit novu instanciu inak by sa to odkazovalo na hlavny cas
         Calendar odda = Calendar.getInstance();
         odda.setTime(calendar.getTime());
         kn.rezervuj(odda);
+        kn.setCitatel(cit);
         pob.urobPozicku(kn);
         cit.urobPozicku(kn);
 
@@ -565,6 +571,118 @@ public class Core {
 
         Pobocka pob = findPobocku(pobocka);
         return pob.getDelayPozKnih(datum);
+
+    }
+
+    /**
+     * Vrati knihu zo vsetkych knih
+     *
+     * @param kniha
+     * @return
+     */
+    public ArrayList findKnihuAllArray(int kniha) {
+        ArrayList list = new ArrayList();
+
+        Kniha kn = findKnihuAll(kniha);
+        if (kn == null) {
+            return null;
+        }
+        list.add(kn);
+        return list;
+
+    }
+
+    /**
+     * Vrati knihu zo vsetkych knih
+     *
+     * @param kniha
+     * @return
+     */
+    public Kniha findKnihuAll(int kniha) {
+
+        Node n = knihy.findNode(new Node(new Kniha(kniha)));
+        Kniha kn = (Kniha) n.getData();
+        return kn;
+
+    }
+
+    /**
+     * Vratenie knihy
+     *
+     * @param id
+     * @param pobocka
+     * @param datum
+     */
+    public void vratKnihu(int id, String pobocka, Calendar datum) {
+
+        Kniha kn = findKnihuAll(id);
+        if (kn == null) {
+            setErrMsg("Zadaná kniha " + String.valueOf(id) + " sa nenašla!");
+            return;
+        }
+
+        if (kn.isPozicana() == false) {
+
+            setErrMsg("Zadaná kniha " + String.valueOf(id) + " nie je požičaná!");
+            return;
+        }
+
+        Pobocka pob = null;
+        // ak dam prazdny string tak to beriem ze nemenim pobocku a vraciam povodne
+        if (pobocka.isEmpty()) {
+            pob = kn.getPobocka();
+        } else {
+            pob = findPobocku(pobocka);
+        }
+
+        if (pob == null) {
+
+            setErrMsg("Zadaná pobočka " + pobocka + " sa nenašla!");
+            return;
+        }
+
+        Citatel cit = kn.getCitatel();
+        //vymazem citatela
+        kn.setCitatel(null);
+
+        //PozKniha pozKniha = new PozKniha(kn, datum);
+        cit.vratKnihu(kn, datum);
+        kn.setOdda(null);
+        kn.setDoda(null);
+
+        kn.getPobocka().vymazPozicku(kn);
+        
+        if (pob.equals(kn.getPobocka()) == false) {
+
+            // cena plus ina pobocka
+            //nastavim novu pobocku
+            //vymazavanie knihy na pobocke  a z celeho zoznamu           
+            kn.getPobocka().vymazKnihu(kn);
+            kn.setPobocka(pob);
+            pob.addKnihu(kn);
+
+        }
+        
+        setInfoMsg("Kniha bola vratena");
+
+    }
+
+    /**
+     * Vrati historiu ciatela
+     *
+     * @param citatel
+     * @return
+     */
+    public ArrayList getCitHistry(int citatel) {
+        Citatel cit = findCitatel(citatel);
+
+        if (cit == null) {
+            setErrMsg("Čitatel " + String.valueOf(citatel) + " sa nenašiel");
+            return null;
+
+        }
+
+        return new ArrayList(cit.getHistoria());
 
     }
 
