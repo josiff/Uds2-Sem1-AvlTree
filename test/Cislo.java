@@ -7,6 +7,7 @@ package test;
 
 import avltree.INode;
 import avltree.Node;
+import system.Store;
 
 /**
  *
@@ -52,7 +53,7 @@ public class Cislo implements INode {
     }
 
     @Override
-    public String save() {
+    public String save(Store st) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

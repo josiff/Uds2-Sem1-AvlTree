@@ -64,7 +64,7 @@ public class CitatelTableModel extends MyTableModel {
             case priz:
                 return citatel.getPrzv();
             case blocked:
-                return citatel.getDateBlocked() == null ? "" : citatel.getDateBlocked();
+                return citatel.getDateBlocked() == null ? "" : dateFormat.format(citatel.getDateBlocked().getTime());
 
         }
         return null;

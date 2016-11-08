@@ -8,8 +8,14 @@ package model;
 import avltree.AvlTree;
 import avltree.INode;
 import avltree.Node;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import system.Setings;
+import system.Store;
 
 /**
  *
@@ -46,11 +52,42 @@ public class Kniha implements INode {
         this.zaner = zaner;
         this.id = id;
         this.vypoz = 30;
+        this.pokuta = 10;
 
     }
 
     public Kniha(int id) {
         this.id = id;
+    }
+
+    public Kniha(String[] atr) {
+
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+            this.nazovKnihy = atr[0];
+            this.autor = atr[1];
+            this.isbn = Integer.parseInt(atr[2]);
+            this.ean = Integer.parseInt(atr[3]);
+            this.zaner = atr[4];
+            this.id = Integer.parseInt(atr[5]);
+
+            if (!atr[6].isEmpty()) {
+                this.odda = Calendar.getInstance();
+                odda.setTime(df.parse(atr[6]));
+                this.doda = Calendar.getInstance();
+                doda.setTime(df.parse(atr[7]));
+            } else {
+                this.odda = null;
+                this.doda = null;
+
+            }
+            this.vypoz = Integer.parseInt(atr[8]);
+            this.pokuta = Double.parseDouble(atr[9]);
+
+        } catch (ParseException ex) {
+            Logger.getLogger(Kniha.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public String getAutor() {
@@ -163,12 +200,38 @@ public class Kniha implements INode {
     }
 
     @Override
-    public String save() {
-        return "";
+    public String save(Store store) {
+        return nazovKnihy + Setings.DELIMETER + autor + Setings.DELIMETER + isbn
+                + Setings.DELIMETER + ean + Setings.DELIMETER + zaner
+                + Setings.DELIMETER + id + Setings.DELIMETER
+                + store.formatDate(odda) + Setings.DELIMETER
+                + store.formatDate(doda) + Setings.DELIMETER
+                + vypoz + Setings.DELIMETER + pokuta + Setings.DELIMETER
+                + getNazPob() + Setings.DELIMETER + getCitId();
+
     }
 
     public Citatel getCitatel() {
         return citatel;
+    }
+
+    public String getCitId() {
+
+        if (citatel != null) {
+
+            return String.valueOf(citatel.getIdCit());
+        }
+
+        return "";
+    }
+
+    public String getNazPob() {
+
+        if (pobocka != null) {
+
+            return pobocka.getNazov();
+        }
+        return "";
     }
 
     public void setCitatel(Citatel citatel) {
@@ -177,7 +240,8 @@ public class Kniha implements INode {
 
     /**
      * Vrati ci je kniha pozicana
-     * @return 
+     *
+     * @return
      */
     public boolean isPozicana() {
 
@@ -192,8 +256,5 @@ public class Kniha implements INode {
     public void setKnihaStr(KnihaStr knihaStr) {
         this.knihaStr = knihaStr;
     }
-    
-    
-    
 
 }

@@ -6,6 +6,7 @@
 package system;
 
 import avltree.AvlTree;
+import avltree.INode;
 import avltree.Node;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -16,7 +17,9 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +38,7 @@ public class Core {
     private AvlTree pobocky;
     private AvlTree citatelia;
     private AvlTree knihy;
+    private AvlTree knihyArchiv;  //knihy history + oneskorenia
     private Generator gnr;
     private SimpleDateFormat dateFormat;
 
@@ -46,7 +50,7 @@ public class Core {
 
     private double priplatokVratenia = 15;
 
-    private int knihaSeq, citSeq;
+    private int knihaSeq, citSeq, knihArchSeq;
 
     public Core() {
         msg = new Message();
@@ -55,9 +59,11 @@ public class Core {
         pobocky = new AvlTree();
         citatelia = new AvlTree();
         knihy = new AvlTree();
+        knihyArchiv = new AvlTree();
         gnr = new Generator();
         knihaSeq = 1;
         citSeq = 1;
+        knihArchSeq = 1;
 
         pocGenKnih = 10;
         pocGenPob = 5;
@@ -225,7 +231,24 @@ public class Core {
      */
     public boolean removeCitatel(int idCit) {
 
-        return citatelia.remove(new Node(new Citatel(idCit)));
+        Citatel cit = findCitatel(idCit);
+
+        if (cit == null) {
+
+            setErrMsg("Čitatel sa nenašiel!");
+            return false;
+
+        }
+
+        if (cit.getAktPoz().getCount() > 0) {
+
+            setErrMsg("Čitateľ má požičané knihy. Nemožno ho vymazať!");
+            return false;
+        }
+
+        cit.remove(knihyArchiv);
+
+        return citatelia.remove(new Node(cit));
     }
 
     /**
@@ -342,28 +365,43 @@ public class Core {
 
     public void save() {
 
+        save(getPobocky(), "Pobocky.txt");
+        save(getCitatelia(), "Citatelia.txt");
+        save(knihy, "Knihy.txt");
+        save(knihyArchiv, "Archiv.txt");
+
+        save(getSaveData(), "Setings.txt");
+
+        setInfoMsg("Dáta boli uložené do súboru");
+
+        //  saveHashTb(getVlastnici(), store, store.getOutV());
+    }
+
+    public void save(AvlTree tree, String file) {
+
         try {
-            if (getPobocky() != null) {
-                Node root = getPobocky().getRoot();
+            Store st = new Store();
+            if (tree != null) {
+                Node root = tree.getRoot();
                 if (root != null) {
 
-                    PrintWriter pr = new PrintWriter(new BufferedWriter(new FileWriter("Pobocky.txt")));
+                    PrintWriter pr = new PrintWriter(new BufferedWriter(new FileWriter(file)));
 
-                    Stack<Node> stack = new Stack<Node>();
+                    Queue<Node> queue = new LinkedList<>();
+                    queue.add(root);
+                    while (!queue.isEmpty()) {
 
-                    while (!stack.isEmpty() || root != null) {
+                        Node tempNode = queue.poll();
+                        // System.out.print(tempNode.getData() + " ");
+                        pr.println(tempNode.getData().save(st));
 
-                        if (root != null) {
-                            stack.push(root);
-                            root = root.getLeft();
-                        } else {
-                            Node n = stack.pop();
-
-                            pr.println(n.getData().save());
-                            //System.out.printf("%s, %n", n.toString());
-                            root = n.getRight();
+                        if (tempNode.getLeft() != null) {
+                            queue.add(tempNode.getLeft());
                         }
 
+                        if (tempNode.getRight() != null) {
+                            queue.add(tempNode.getRight());
+                        }
                     }
 
                     pr.close();
@@ -379,24 +417,109 @@ public class Core {
             System.out.println("Chyba pri zapisovani");
         }
 
-        setInfoMsg("Dáta boli uložené do súboru");
+        //  saveHashTb(getVlastnici(), store, store.getOutV());
+    }
+
+    public void save(String data, String file) {
+
+        try {
+            PrintWriter pr = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+
+            pr.println(data);
+
+            pr.close();
+
+        } catch (IOException e) {
+            System.out.println("Chyba pri zapisovani");
+        }
 
         //  saveHashTb(getVlastnici(), store, store.getOutV());
+    }
+
+    public String getSaveData() {
+
+        return knihaSeq + Setings.DELIMETER + citSeq + Setings.DELIMETER + knihArchSeq;
+
     }
 
     public void loadfromTxt() {
 
         BufferedReader bufReader;
         try {
-            bufReader = new BufferedReader(new FileReader("Pobocky.txt"));
+
             String regx = "\\|";
             String line = null;
-
+            bufReader = new BufferedReader(new FileReader("Pobocky.txt"));
             while ((line = bufReader.readLine()) != null) {
 
                 String[] atr = line.split(regx);
 
                 addPobocku(atr[0]);
+            }
+
+            line = null;
+            bufReader = new BufferedReader(new FileReader("Citatelia.txt"));
+            while ((line = bufReader.readLine()) != null) {
+
+                String[] atr = line.split(regx);
+
+                citatelia.insert(new Node(new Citatel(atr)));
+            }
+
+            line = null;
+            bufReader = new BufferedReader(new FileReader("Knihy.txt"));
+            while ((line = bufReader.readLine()) != null) {
+
+                String[] atr = line.split(regx);
+
+                Kniha kn = new Kniha(atr);
+                //ak existuje pobocka priradim ju tam
+                if (atr.length > 10) {
+
+                    Pobocka pob = findPobocku(atr[10]);
+                    pob.addKnihu(kn);
+                    //ak ma vyplneny odda a doda tak hu pozicam
+                    if (kn.isPozicana()) {
+                        pob.getPozKnihy().insert(new Node(kn));
+
+                        Citatel cit = findCitatel(getInt(atr[11]));
+                        cit.urobPozicku(kn);
+
+                    }
+                }
+                knihy.insert(new Node(kn));
+
+            }
+
+            line = null;
+            bufReader = new BufferedReader(new FileReader("Archiv.txt"));
+            while ((line = bufReader.readLine()) != null) {
+
+                String[] atr = line.split(regx);
+
+                Kniha kn = findKnihuAll(getInt(atr[0]));
+                Citatel ct = findCitatel(getInt(atr[1]));
+                PozKniha pk = new PozKniha(atr, kn, ct);
+                if (pk.getDays() > 0) {
+                    // ak som vratil neskoro tak
+                    ct.getOneskorenia().add(pk);
+
+                }
+                ct.getHistoria().add(pk);
+
+                knihyArchiv.insert(new Node(pk));
+
+            }
+
+            line = null;
+            bufReader = new BufferedReader(new FileReader("Setings.txt"));
+            while ((line = bufReader.readLine()) != null) {
+
+                String[] atr = line.split(regx);
+                knihaSeq = getInt(atr[0]);
+                citSeq = getInt(atr[1]);
+                knihArchSeq = getInt(atr[2]);
+                
             }
 
         } catch (IOException ex) {
@@ -469,6 +592,13 @@ public class Core {
             return;
         }
 
+        if (cit.hasDelay(calendar)) {
+
+            setErrMsg("Čitateľ mešká z vrátením knih");
+            return;
+
+        }
+
         //todo kontrola na meskanie s vratenim
         //musim vytvorit novu instanciu inak by sa to odkazovalo na hlavny cas
         Calendar odda = Calendar.getInstance();
@@ -523,6 +653,16 @@ public class Core {
         int result = citSeq;
         citSeq++;
         return result;
+    }
+
+    public int getKnihArchSeq() {
+        int result = knihArchSeq;
+        knihArchSeq++;
+        return result;
+    }
+
+    public void setKnihArchSeq(int knihArchSeq) {
+        this.knihArchSeq = knihArchSeq;
     }
 
     public void setCitSeq(int citSeq) {
@@ -641,28 +781,42 @@ public class Core {
             return;
         }
 
+        double cena = 0;
+        PozKniha pozKniha = new PozKniha(getKnihArchSeq(), kn, datum);
         Citatel cit = kn.getCitatel();
         //vymazem citatela
         kn.setCitatel(null);
 
-        //PozKniha pozKniha = new PozKniha(kn, datum);
-        cit.vratKnihu(kn, datum);
+        cit.vratKnihu(pozKniha);
+        knihyArchiv.insert(new Node(pozKniha));
+
+        cena += kn.getPokuta() * pozKniha.getDays();
+
+        if (pozKniha.getDays() > 60) {
+
+            cit.addBloked(datum);
+        }
+
         kn.setOdda(null);
         kn.setDoda(null);
 
         kn.getPobocka().vymazPozicku(kn);
-        
+
         if (pob.equals(kn.getPobocka()) == false) {
 
             // cena plus ina pobocka
             //nastavim novu pobocku
             //vymazavanie knihy na pobocke  a z celeho zoznamu           
-            kn.getPobocka().vymazKnihu(kn);            
+            kn.getPobocka().vymazKnihu(kn);
             pob.addKnihu(kn);
+            cena += priplatokVratenia;
 
         }
-        
-        setInfoMsg("Kniha bola vratena");
+        if (cena > 0) {
+            setInfoMsg("Kniha bola vratena. Cena vratenia je: " + String.valueOf(cena));
+        } else {
+            setInfoMsg("Kniha bola vratena");
+        }
 
     }
 
@@ -684,9 +838,8 @@ public class Core {
         return new ArrayList(cit.getHistoria());
 
     }
-    
-    
-     /**
+
+    /**
      * Vrati omeskania ciatela
      *
      * @param citatel
@@ -703,6 +856,66 @@ public class Core {
 
         return new ArrayList(cit.getOneskorenia());
 
+    }
+
+    /**
+     * Vymazanie knihy
+     *
+     * @param id
+     */
+    public void removeKniha(int id) {
+
+        Kniha kn = findKnihuAll(id);
+
+        if (kn == null) {
+
+            setErrMsg("Kniha " + id + " sa nenašla");
+            return;
+        }
+
+        if (kn.isPozicana()) {
+
+            setErrMsg("Kniha " + id + " je požičaná a preto ju nemožno vymazať");
+            return;
+
+        }
+
+        Pobocka pob = kn.getPobocka();
+        pob.vymazKnihu(kn);
+        //knihy.remove(new Node(kn)); todo
+
+        setInfoMsg("Kniha " + id + " bola vymazaná.");
+
+    }
+
+    /**
+     * Vymazanie pobocky
+     *
+     * @param old
+     * @param nova
+     */
+    public void removePobocka(String old, String nova) {
+
+        Pobocka pobS = findPobocku(old);
+
+        if (pobS == null) {
+            setErrMsg("Pobočka " + old + " sa nenašla.");
+
+        }
+
+        Pobocka pobN = findPobocku(nova);
+
+        if (pobN == null) {
+            setErrMsg("Pobčka " + nova + " sa nenašla");
+        }
+
+        pobN.prevedZ(pobS);
+        pobocky.remove(new Node(pobS));
+
+    }
+
+    public AvlTree getKihyArchiv() {
+        return knihyArchiv;
     }
 
 }

@@ -3,18 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package avltree;
-
-import system.Store;
+package system;
 
 /**
  *
  * @author Jožko
  */
-public interface INode {
+public class Setings {
     
-    public int compare( INode paData);
-    
-    public String save(Store store);
+    public static  final String DELIMETER = "|";
     
 }

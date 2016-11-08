@@ -6,6 +6,7 @@
 package model;
 
 import avltree.INode;
+import system.Store;
 
 /**
  *
@@ -37,7 +38,7 @@ public class KnihaStr implements INode {
     }
 
     @Override
-    public String save() {
+    public String save(Store store) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

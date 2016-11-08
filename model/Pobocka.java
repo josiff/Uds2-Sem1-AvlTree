@@ -11,6 +11,7 @@ import avltree.Node;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Stack;
+import system.Store;
 
 /**
  *
@@ -38,7 +39,7 @@ public class Pobocka implements INode {
      */
     public boolean addKnihu(Kniha kniha) {
 
-        KnihaStr kStr = new KnihaStr(kniha); 
+        KnihaStr kStr = new KnihaStr(kniha);
         kniha.setKnihaStr(kStr);
         kniha.setPobocka(this);
         knihyInt.insert(new Node(kniha));
@@ -86,7 +87,7 @@ public class Pobocka implements INode {
     }
 
     @Override
-    public String save() {
+    public String save(Store store) {
         return nazov;
     }
 
@@ -178,8 +179,7 @@ public class Pobocka implements INode {
         return pozKnihy.insert(new Node(new KnihaStr(kniha)));
 
     }
-    
-    
+
     /**
      * Vymazanie pozicanej knihy
      *
@@ -191,8 +191,6 @@ public class Pobocka implements INode {
         return pozKnihy.remove(new Node(new KnihaStr(kniha)));
 
     }
-    
-    
 
     public AvlTree getPozKnihy() {
         return pozKnihy;
@@ -234,6 +232,7 @@ public class Pobocka implements INode {
 
     /**
      * Vymazanie knihy
+     *
      * @param kniha
      */
     public void vymazKnihu(Kniha kniha) {
@@ -246,8 +245,45 @@ public class Pobocka implements INode {
         knihyStr.remove(new Node(knihaStr));
 
     }
-    
-    
-    
+
+    /**
+     * Presunutie pobocky
+     *
+     * @param pobS
+     */
+    public void prevedZ(Pobocka pobS) {
+
+        Node root = pobS.getKnihyInt().getRoot();
+        if (root == null) {
+            return;
+        }
+
+        Stack<Node> stack = new Stack<Node>();
+
+        while (!stack.isEmpty() || root != null) {
+
+            if (root != null) {
+                stack.push(root);
+                root = root.getLeft();
+            } else {
+                Node n = stack.pop();
+                Kniha knih = (Kniha) n.getData();
+
+                addKnihu(knih);
+
+                if (knih.isPozicana()) {
+                    urobPozicku(knih);
+                }
+
+                //System.out.printf("%s, %n", n.toString());
+                root = n.getRight();
+            }
+
+        }
+
+        pobS.setKnihyInt(null);
+        pobS.setKnihyStr(null);
+
+    }
 
 }

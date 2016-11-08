@@ -149,6 +149,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         knTxtHladaj = new javax.swing.JTextField();
+        jButton9 = new javax.swing.JButton();
         jPanel6 = new javax.swing.JPanel();
         citTabPanel = new javax.swing.JTabbedPane();
         jPanel7 = new javax.swing.JPanel();
@@ -557,6 +558,13 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             }
         });
 
+        jButton9.setText("Vymaz");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -569,6 +577,8 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                 .addComponent(jButton8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(knihBtnRefres)
                 .addContainerGap())
@@ -581,7 +591,8 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                     .addComponent(knihBtnRefres)
                     .addComponent(jButton7)
                     .addComponent(jButton8)
-                    .addComponent(knTxtHladaj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(knTxtHladaj, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 460, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(114, Short.MAX_VALUE))
@@ -689,6 +700,11 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         });
 
         citBtnDel.setText("Vymaz");
+        citBtnDel.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                citBtnDelActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Meno");
 
@@ -761,12 +777,12 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
                     .addComponent(jLabel5)
                     .addComponent(citTxtPriez, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14)
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(citBtnDel)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(citTxtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton4)
-                        .addComponent(jButton5)))
+                        .addComponent(jButton5))
+                    .addComponent(citBtnDel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
@@ -954,15 +970,16 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
      */
     private void pobBtnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pobBtnDelActionPerformed
         int row = tabPobocky.getSelectedRow();
+        String str = showInput("Zadajte pobocku kam sa presunie agenda.");
+        if (str != null) {
+            if (row > -1) {
+                String name = (String) modelPob.getValueAt(row, PobockaTableModel.name);
+                if (!str.isEmpty()) {
+                    core.removePobocka(name, str);
+                    showInf("Pobočka bola vymazaná");
+                    refreshTabPoboc();
 
-        if (row > -1) {
-            String name = (String) modelPob.getValueAt(row, PobockaTableModel.name);
-            if (core.delPobocku(name)) {
-                showInf("Pobočka bola vymazaná");
-                refreshTabPoboc();
-            } else {
-                showInf("Pobočku sa nepodarilo vymazať");
-
+                }
             }
         }
     }//GEN-LAST:event_pobBtnDelActionPerformed
@@ -1309,10 +1326,29 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         String nazov = showInput("Zadajte nazov pobocky");
-        core.vratKnihu(getIdKnihyAll(), nazov, dateChooser.getCurrent());
-        //refreshTabCitPoz();
-        refreshTabKniha();
+        if (nazov != null) {
+            core.vratKnihu(getIdKnihyAll(), nazov, dateChooser.getCurrent());
+            //refreshTabCitPoz();
+            refreshTabKniha();
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+
+        core.removeKniha(getIdKnihyAll());
+        refreshTabAllKnih();
+        refreshTabKniha();
+
+    }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void citBtnDelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_citBtnDelActionPerformed
+
+        core.removeCitatel(getIdCitatela());
+
+        refreshTabCit();
+
+
+    }//GEN-LAST:event_citBtnDelActionPerformed
 
     /**
      * Vrati nazov aktulane oznacenej pobocky
@@ -1531,6 +1567,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1737,8 +1774,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         tableHistPozic.updateUI();
 
     }
-    
-    
+
     /**
      * Tabulka pozicanych knih u citatela
      *
@@ -1754,9 +1790,6 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         tableOmesPoz.updateUI();
 
     }
-    
-    
-    
 
     @Override
     public void onMessage(Message msg) {

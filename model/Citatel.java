@@ -8,8 +8,15 @@ package model;
 import avltree.AvlTree;
 import avltree.INode;
 import avltree.Node;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.Stack;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import system.Setings;
+import system.Store;
 
 /**
  *
@@ -22,7 +29,6 @@ public class Citatel implements INode {
     private int idCit;
     private AvlTree aktPoz;
 
-    private boolean blocked;
     private Calendar dateBlocked;
     private LinkedList<PozKniha> oneskorenia;
     private LinkedList<PozKniha> historia;
@@ -39,11 +45,32 @@ public class Citatel implements INode {
         this.idCit = idCit;
         this.meno = meno;
         this.przv = przv;
-        blocked = false;
+
         dateBlocked = null;
         aktPoz = new AvlTree();
         oneskorenia = new LinkedList<>();
         historia = new LinkedList<>();
+    }
+
+    public Citatel(String[] atr) {
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
+            this.idCit = Integer.parseInt(atr[0]);
+            this.meno = atr[1];
+            this.przv = atr[2];
+
+            if (atr.length < 4) {
+                dateBlocked = null;
+            } else {
+                this.dateBlocked = Calendar.getInstance();
+                dateBlocked.setTime(df.parse(atr[3]));
+            }
+            aktPoz = new AvlTree();
+            oneskorenia = new LinkedList<>();
+            historia = new LinkedList<>();
+        } catch (ParseException ex) {
+            Logger.getLogger(Citatel.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override
@@ -88,8 +115,11 @@ public class Citatel implements INode {
     }
 
     @Override
-    public String save() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String save(Store store) {
+
+        return idCit + Setings.DELIMETER + meno + Setings.DELIMETER
+                + przv + Setings.DELIMETER + store.formatDate(dateBlocked)
+                + Setings.DELIMETER;
     }
 
     /**
@@ -107,18 +137,16 @@ public class Citatel implements INode {
     /**
      * Vymazanie knihy
      *
-     * @param kniha
-     * @param datum
+     * @param pozkniha
      * @return
      */
-    public void vratKnihu(Kniha kniha, Calendar datum) {
+    public void vratKnihu(PozKniha pozkniha) {
 
-        PozKniha pozkniha = new PozKniha(kniha, datum);
-        aktPoz.remove(new Node(kniha));
+        aktPoz.remove(new Node(pozkniha.getKniha()));
         if (pozkniha.getDays() > 0) {
             // ak som vratil neskoro tak
             oneskorenia.add(pozkniha);
-        
+
         }
         historia.add(pozkniha);
 
@@ -131,18 +159,18 @@ public class Citatel implements INode {
      * @return
      */
     public boolean isBlocked(Calendar date) {
-        boolean result = true;
+        boolean result = false;
         Calendar od = dateBlocked;
         if (od != null) {
             od.add(Calendar.YEAR, 1);
             result = od.after(date);
             //ci je blokunuty a ci nahodou nema block na rok
-        }
-        return blocked && result;
-    }
+        } else {
 
-    public void setBlocked(boolean blocked) {
-        this.blocked = blocked;
+            dateBlocked = null;
+
+        }
+        return result;
     }
 
     /**
@@ -174,6 +202,96 @@ public class Citatel implements INode {
         this.historia = historia;
     }
 
-    
-    
+    /**
+     * Vymazanie citatela
+     *
+     * @param archiv
+     */
+    public void remove(AvlTree archiv) {
+
+        //vymazem z archivu referencie
+        for (PozKniha kniha : oneskorenia) {
+            archiv.remove(new Node(kniha));
+            kniha.setCitatel(null);
+            kniha.setKniha(null);
+        }
+        //vymazem z archivu referencie
+        for (PozKniha kniha : historia) {
+            archiv.remove(new Node(kniha));
+            kniha.setCitatel(null);
+            kniha.setKniha(null);
+        }
+
+        oneskorenia.clear();
+        historia.clear();
+
+    }
+
+    /**
+     * Kontrola ci meska
+     *
+     * @param calendar
+     * @return
+     */
+    public boolean hasDelay(Calendar calendar) {
+        Node root = aktPoz.getRoot();
+        if (root == null) {
+            return false;
+        }
+        boolean result = false;
+        Stack<Node> stack = new Stack<Node>();
+
+        while (!stack.isEmpty() || root != null) {
+
+            if (root != null) {
+                stack.push(root);
+                root = root.getLeft();
+            } else {
+                Node n = stack.pop();
+                KnihaStr knih = (KnihaStr) n.getData();
+                Calendar doda = knih.getKniha().getDoda();
+                if (doda != null) {
+
+                    if (doda.before(calendar)) {
+                        result = true;
+                        root = null;
+                        stack.clear();
+                    }
+                }
+                //System.out.printf("%s, %n", n.toString());
+                root = n.getRight();
+            }
+
+        }
+
+        return result;
+    }
+
+    /**
+     * Nastavenie roku blokovania
+     *
+     * @param calendar
+     */
+    public void addBloked(Calendar calendar) {
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(calendar.getTime());
+        end.add(Calendar.YEAR, 1);
+
+        if (dateBlocked == null) {
+
+            dateBlocked = end;
+
+        } else {
+
+            if (dateBlocked.before(end)) {
+
+                dateBlocked = end;
+
+            }
+
+        }
+
+    }
+
 }
