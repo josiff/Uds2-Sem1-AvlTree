@@ -480,7 +480,7 @@ public class Core {
                     pob.addKnihu(kn);
                     //ak ma vyplneny odda a doda tak hu pozicam
                     if (kn.isPozicana()) {
-                        pob.getPozKnihy().insert(new Node(kn));
+                        pob.getPozKnihy().insert(new Node(kn.getKnihaStr()));
 
                         Citatel cit = findCitatel(getInt(atr[11]));
                         cit.urobPozicku(kn);

@@ -1030,7 +1030,9 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             testAreaVypis.setText(test.result());
             test.testuj();
             testAreaVypis.append("\n" + test.result());
-
+            String res = "Prvky sa ";
+            res += test.compare() == true ? "zhoduju" : "nezhoduju";
+            testAreaVypis.append("\n" + res);
         } catch (NumberFormatException e) {
             showErr("Zlý formát vstupov");
         } catch (Exception e) {

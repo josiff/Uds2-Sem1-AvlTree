@@ -406,6 +406,7 @@ public class AvlTree {
             if (cis < 0) {
                 if (node != null) {
                     list.add(node.getData());
+                    list = inOrder(node);
                 }
 
             }

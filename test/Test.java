@@ -38,8 +38,8 @@ public class Test {
     }
 
     public void testuj() {
-
-        /* for (int i = 0; i < 10000; i++) {
+        /*
+         for (int i = 0; i < 10000; i++) {
          insert();
 
          }
@@ -50,38 +50,36 @@ public class Test {
          }
 
          vypis();*/
-        /*
-         for (int i = 0; i < 0; i++) {
+
+        /*for (int i = 0; i < 0; i++) {
          insert();
 
-         }
-         //vypis();
+         }*/
+        //vypis();
+        double cis = 0.0;
 
-         double cis = 0.0;
+        for (int i = 0; i < getPocOperaci(); i++) {
+            cis = rndOper.nextDouble();
+            if (cis < getParvInsert()) {
 
-         for (int i = 0; i < getPocOperaci(); i++) {
-         cis = rndOper.nextDouble();
-         if (cis < getParvInsert()) {
+                remove();
+                //remove++;
+            } else {
+                insert();
+                //add++;
+            }
+        }
 
-         remove();
-         //remove++;
-         } else {
-         insert();
-         //add++;
-         }
-         }
-         */
         // vypis();
-        insert(8);
-        insert(5);
-        insert(9);
-        insert(3);
-        insert(6);
-        write(tree.getRoot());
-        remove(5);
-        System.out.println("----------------------");
-        write(tree.getRoot());
-
+       /* insert(8);
+         insert(5);
+         insert(9);
+         insert(3);
+         insert(6);
+         write(tree.getRoot());
+         remove(5);
+         System.out.println("----------------------");
+         write(tree.getRoot());*/
     }
 
     private void insert() {
@@ -175,7 +173,7 @@ public class Test {
             } else {
                 Node n = stack.pop();
                 count++;
-                System.out.printf("%s, %n", n.toString());
+                //  System.out.printf("%s, %n", n.toString());
                 root = n.getRight();
             }
 
@@ -201,7 +199,7 @@ public class Test {
                 root = root.getLeft();
             } else {
                 Node n = stack.pop();
-                Cislo c = (Cislo)n.getData();
+                Cislo c = (Cislo) n.getData();
                 count++;
                 System.out.println(c.getKey());
                 root = n.getRight();
@@ -228,6 +226,18 @@ public class Test {
 
         return "Správna výška";
 
+    }
+
+    public boolean compare() {
+        boolean result = true;
+        for (INode item : items) {
+            Node n = tree.findNode(new Node(item));
+            if (n == null) {
+                result = false;
+                return result;
+            }
+        }
+        return result;
     }
 
     public int getPocOperaci() {

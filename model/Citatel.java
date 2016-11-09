@@ -129,7 +129,7 @@ public class Citatel implements INode {
      * @return
      */
     public boolean urobPozicku(Kniha kniha) {
-
+        kniha.setCitatel(this);
         return aktPoz.insert(new Node(kniha));
 
     }
