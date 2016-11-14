@@ -5,9 +5,9 @@
  */
 package system;
 
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 /**
  *
@@ -16,6 +16,7 @@ import sun.java2d.pipe.SpanShapeRenderer;
 public class Store {
 
     private SimpleDateFormat dateFormat;
+    private PrintWriter pr;
 
     public Store() {
 
@@ -31,5 +32,15 @@ public class Store {
         return cal == null ? "" : dateFormat.format(cal.getTime());
 
     }
+
+    public PrintWriter getPr() {
+        return pr;
+    }
+
+    public void setPr(PrintWriter pr) {
+        this.pr = pr;
+    }
+    
+    
 
 }

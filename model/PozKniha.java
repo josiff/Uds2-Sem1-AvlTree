@@ -30,7 +30,7 @@ public class PozKniha implements INode {
     private Calendar koniec;  //kedy bol skutocny datum vratenia
     private Kniha kniha;
     private int days; //0 ak som vratil ok inak o kolko dni som prekrocil
-    private Citatel citatel;
+    //private Citatel citatel;
 
     public PozKniha(int id, Kniha kniha, Calendar aktDatum) {
         this.id = id;
@@ -38,7 +38,7 @@ public class PozKniha implements INode {
         this.odda = kniha.getOdda();
         this.doda = kniha.getDoda();
         this.koniec = aktDatum;
-        this.citatel = kniha.getCitatel();
+        //this.citatel = kniha.getCitatel();
 
         if (doda.before(aktDatum)) {
             /* long diff = aktDatum.getTimeInMillis() - doda.getTimeInMillis();
@@ -58,7 +58,7 @@ public class PozKniha implements INode {
             SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
             this.id = Integer.parseInt(atr[2]);
             this.kniha = kn;
-            this.citatel = ct;
+            //this.citatel = ct;
 
             if (!atr[3].isEmpty()) {
 
@@ -149,8 +149,8 @@ public class PozKniha implements INode {
         }
     }
 
-    @Override
-    public String save(Store store) {
+    
+    public String save(Store store, Citatel citatel) {
         return kniha.getId() + Setings.DELIMETER
                 + citatel.getIdCit() + Setings.DELIMETER
                 + id + Setings.DELIMETER
@@ -168,12 +168,17 @@ public class PozKniha implements INode {
         this.id = id;
     }
 
-    public Citatel getCitatel() {
+  /*  public Citatel getCitatel() {
         return citatel;
     }
 
     public void setCitatel(Citatel citatel) {
         this.citatel = citatel;
+    }*/
+
+    @Override
+    public String save(Store store) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

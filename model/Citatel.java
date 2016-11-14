@@ -8,10 +8,15 @@ package model;
 import avltree.AvlTree;
 import avltree.INode;
 import avltree.Node;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -117,9 +122,20 @@ public class Citatel implements INode {
     @Override
     public String save(Store store) {
 
+        saveHistory(store);
         return idCit + Setings.DELIMETER + meno + Setings.DELIMETER
                 + przv + Setings.DELIMETER + store.formatDate(dateBlocked)
                 + Setings.DELIMETER;
+    }
+    
+    
+    public void saveHistory(Store st) {
+
+        PrintWriter pr = st.getPr();
+        for (PozKniha item : historia) {
+            pr.println(item.save(st, this));
+        }
+        //  saveHashTb(getVlastnici(), store, store.getOutV());
     }
 
     /**
@@ -212,7 +228,7 @@ public class Citatel implements INode {
     public void remove(AvlTree archiv) {
 
         //vymazem z archivu referencie
-        for (PozKniha kniha : oneskorenia) {
+      /*  for (PozKniha kniha : oneskorenia) {
             archiv.remove(new Node(kniha));
             kniha.setCitatel(null);
             kniha.setKniha(null);
@@ -222,7 +238,7 @@ public class Citatel implements INode {
             archiv.remove(new Node(kniha));
             kniha.setCitatel(null);
             kniha.setKniha(null);
-        }
+        }*/
 
         oneskorenia.clear();
         historia.clear();

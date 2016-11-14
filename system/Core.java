@@ -39,7 +39,7 @@ public class Core {
     private AvlTree pobocky;
     private AvlTree citatelia;
     private AvlTree knihy;
-    private AvlTree knihyArchiv;  //knihy history + oneskorenia
+    //private AvlTree knihyArchiv;  //knihy history + oneskorenia
     private Generator gnr;
     private SimpleDateFormat dateFormat;
 
@@ -60,7 +60,7 @@ public class Core {
         pobocky = new AvlTree();
         citatelia = new AvlTree();
         knihy = new AvlTree();
-        knihyArchiv = new AvlTree();
+       // knihyArchiv = new AvlTree();
         gnr = new Generator();
         knihaSeq = 1;
         citSeq = 1;
@@ -247,7 +247,7 @@ public class Core {
             return false;
         }
 
-        cit.remove(knihyArchiv);
+        //cit.remove(knihyArchiv);
 
         return citatelia.remove(new Node(cit));
     }
@@ -367,9 +367,9 @@ public class Core {
     public void save() {
 
         save(getPobocky(), "Pobocky.txt");
-        save(getCitatelia(), "Citatelia.txt");
+        save(getCitatelia(), "Citatelia.txt", "Archiv.txt");
         save(knihy, "Knihy.txt");
-        save(knihyArchiv, "Archiv.txt");
+        //save(knihyArchiv, "Archiv.txt");
 
         save(getSaveData(), "Setings.txt");
 
@@ -420,6 +420,53 @@ public class Core {
 
         //  saveHashTb(getVlastnici(), store, store.getOutV());
     }
+    
+    public void save(AvlTree tree, String file, String file2) {
+
+        try {
+            Store st = new Store();
+            if (tree != null) {
+                Node root = tree.getRoot();
+                if (root != null) {
+
+                    PrintWriter pr = new PrintWriter(new BufferedWriter(new FileWriter(file)));
+                    PrintWriter pr2 = new PrintWriter(new BufferedWriter(new FileWriter(file2)));
+                    st.setPr(pr2);
+                    Queue<Node> queue = new LinkedList<>();
+                    queue.add(root);
+                    while (!queue.isEmpty()) {
+
+                        Node tempNode = queue.poll();
+                        // System.out.print(tempNode.getData() + " ");
+                        pr.println(tempNode.getData().save(st));
+
+                        if (tempNode.getLeft() != null) {
+                            queue.add(tempNode.getLeft());
+                        }
+
+                        if (tempNode.getRight() != null) {
+                            queue.add(tempNode.getRight());
+                        }
+                    }
+
+                    pr.close();
+                    pr2.close();
+
+                } else {
+                    System.out.println("Chyba");
+                }
+            } else {
+                System.out.println("Chyba");
+            }
+
+        } catch (IOException e) {
+            System.out.println("Chyba pri zapisovani");
+        }
+
+        //  saveHashTb(getVlastnici(), store, store.getOutV());
+    }
+    
+    
 
     public void save(String data, String file) {
 
@@ -519,7 +566,7 @@ public class Core {
                     }
                     ct.getHistoria().add(pk);
 
-                    knihyArchiv.insert(new Node(pk));
+                   // knihyArchiv.insert(new Node(pk));
 
                 }
             }
@@ -802,7 +849,7 @@ public class Core {
         kn.setCitatel(null);
 
         cit.vratKnihu(pozKniha);
-        knihyArchiv.insert(new Node(pozKniha));
+       // knihyArchiv.insert(new Node(pozKniha));
 
         cena += kn.getPokuta() * pozKniha.getDays();
 
@@ -928,8 +975,8 @@ public class Core {
 
     }
 
-    public AvlTree getKihyArchiv() {
+   /* public AvlTree getKihyArchiv() {
         return knihyArchiv;
-    }
+    }*/
 
 }
