@@ -880,6 +880,90 @@ public class Core {
         }
 
     }
+    
+     /**
+     * Vratenie knihy
+     *
+     * @param idCit   
+     * @param idKnih   
+     * @param pobocka
+     * @param datum
+     */
+    public void vratKnihu(int idCit, int idKnih, String pobocka, Calendar datum) {
+
+        
+        Citatel cit = findCitatel(idCit);
+        if (cit == null) {
+            setErrMsg("Zadaný čitatel " + String.valueOf(idCit) + " sa nenašiel!");
+            return;
+        }
+        
+        Kniha kn = (Kniha)cit.getAktPoz().findNode(new Node(new Kniha(idKnih))).getData();
+
+        if(kn == null){
+            setErrMsg("Kniha sa nenašla");
+            return;
+        }
+        
+        
+        if (kn.isPozicana() == false) {
+
+            setErrMsg("Zadaná kniha " + String.valueOf(idKnih) + " nie je požičaná!");
+            return;
+        }
+
+        Pobocka pob = null;
+        // ak dam prazdny string tak to beriem ze nemenim pobocku a vraciam povodne
+        if (pobocka.isEmpty()) {
+            pob = kn.getPobocka();
+        } else {
+            pob = findPobocku(pobocka);
+        }
+
+        if (pob == null) {
+
+            setErrMsg("Zadaná pobočka " + pobocka + " sa nenašla!");
+            return;
+        }
+
+        double cena = 0;
+        PozKniha pozKniha = new PozKniha(getKnihArchSeq(), kn, datum);
+        
+        //vymazem citatela
+        kn.setCitatel(null);
+
+        cit.vratKnihu(pozKniha);
+       // knihyArchiv.insert(new Node(pozKniha));
+
+        cena += kn.getPokuta() * pozKniha.getDays();
+
+        if (pozKniha.getDays() > 60) {
+
+            cit.addBloked(datum);
+        }
+
+        kn.setOdda(null);
+        kn.setDoda(null);
+
+        kn.getPobocka().vymazPozicku(kn);
+
+        if (pob.equals(kn.getPobocka()) == false) {
+
+            // cena plus ina pobocka
+            //nastavim novu pobocku
+            //vymazavanie knihy na pobocke  a z celeho zoznamu           
+            kn.getPobocka().vymazKnihu(kn);
+            pob.addKnihu(kn);
+            cena += priplatokVratenia;
+
+        }
+        if (cena > 0) {
+            setInfoMsg("Kniha bola vratena. Cena vratenia je: " + String.valueOf(cena));
+        } else {
+            setInfoMsg("Kniha bola vratena");
+        }
+
+    }
 
     /**
      * Vrati historiu ciatela

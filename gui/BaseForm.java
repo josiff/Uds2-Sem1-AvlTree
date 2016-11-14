@@ -155,6 +155,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         jPanel7 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         tableAktPozic = new javax.swing.JTable();
+        jButton10 = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
         jScrollPane7 = new javax.swing.JScrollPane();
         tableHistPozic = new javax.swing.JTable();
@@ -614,15 +615,30 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         ));
         jScrollPane6.setViewportView(tableAktPozic);
 
+        jButton10.setText("Vrať knihu");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
         jPanel7Layout.setHorizontalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 667, Short.MAX_VALUE)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton10)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 255, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton10)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         citTabPanel.addTab("Aktuálne pôžičky", jPanel7);
@@ -1352,6 +1368,15 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
 
     }//GEN-LAST:event_citBtnDelActionPerformed
 
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+
+        String nazov = showInput("Zadajte nazov pobocky");
+        if (nazov != null) {
+
+            core.vratKnihu(getIdCitatela(), getIdCitAkPoz() , nazov, dateChooser.getCurrent());
+        }
+    }//GEN-LAST:event_jButton10ActionPerformed
+
     /**
      * Vrati nazov aktulane oznacenej pobocky
      *
@@ -1397,7 +1422,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         }
 
     }
-    
+
     /**
      * Vrati nazov aktulane oznacenej knihy
      *
@@ -1456,6 +1481,29 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         if (row > -1) {
 
             int cis = (int) modelCitatel.getValueAt(row, CitatelTableModel.id);
+            return cis;
+
+        } else {
+
+            showErr("Nie je vybratý žiadny čitateľ");
+            return -1;
+
+        }
+
+    }
+    
+    /**
+     * Vrati id aktulane oznaceneho citatela
+     *
+     * @return
+     */
+    public int getIdCitAkPoz() {
+
+        int row = tableAktPozic.getSelectedRow();
+
+        if (row > -1) {
+
+            int cis = (int) modelAktPoz.getValueAt(row, KnihaTableModel.id);
             return cis;
 
         } else {
@@ -1585,6 +1633,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
     private javax.swing.JMenuItem fileBtnLoad;
     private javax.swing.JMenuItem fileBtnSave;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
