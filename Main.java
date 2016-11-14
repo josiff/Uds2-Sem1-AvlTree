@@ -1,6 +1,8 @@
 
 import gui.BaseForm;
 import java.util.Calendar;
+import model.Kniha;
+import model.KnihaStr;
 import model.Pobocka;
 import test.Test;
 
@@ -25,9 +27,12 @@ public class Main {
 
         new BaseForm().setVisible(true);
         
+           
         
         
 
     }
+    
+    
 
 }

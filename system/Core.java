@@ -10,6 +10,7 @@ import avltree.INode;
 import avltree.Node;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -443,83 +444,96 @@ public class Core {
     }
 
     public void loadfromTxt() {
-
+        File f;
         BufferedReader bufReader;
         try {
 
             String regx = "\\|";
             String line = null;
-            bufReader = new BufferedReader(new FileReader("Pobocky.txt"));
-            while ((line = bufReader.readLine()) != null) {
+            f = new File("Pobocky.txt");
+            if (f.exists()) {
+                bufReader = new BufferedReader(new FileReader(f));
+                while ((line = bufReader.readLine()) != null) {
 
-                String[] atr = line.split(regx);
+                    String[] atr = line.split(regx);
 
-                addPobocku(atr[0]);
+                    addPobocku(atr[0]);
+                }
+            }
+
+            f = new File("Citatelia.txt");
+            if (f.exists()) {
+                line = null;
+                bufReader = new BufferedReader(new FileReader(f));
+                while ((line = bufReader.readLine()) != null) {
+
+                    String[] atr = line.split(regx);
+
+                    citatelia.insert(new Node(new Citatel(atr)));
+                }
             }
 
             line = null;
-            bufReader = new BufferedReader(new FileReader("Citatelia.txt"));
-            while ((line = bufReader.readLine()) != null) {
+            f = new File("Knihy.txt");
+            if (f.exists()) {
+                bufReader = new BufferedReader(new FileReader(f));
+                while ((line = bufReader.readLine()) != null) {
 
-                String[] atr = line.split(regx);
+                    String[] atr = line.split(regx);
 
-                citatelia.insert(new Node(new Citatel(atr)));
+                    Kniha kn = new Kniha(atr);
+                    //ak existuje pobocka priradim ju tam
+                    if (atr.length > 10) {
+
+                        Pobocka pob = findPobocku(atr[10]);
+                        pob.addKnihu(kn);
+                        //ak ma vyplneny odda a doda tak hu pozicam
+                        if (kn.isPozicana()) {
+                            pob.getPozKnihy().insert(new Node(kn.getKnihaStr()));
+
+                            Citatel cit = findCitatel(getInt(atr[11]));
+                            cit.urobPozicku(kn);
+
+                        }
+                    }
+                    knihy.insert(new Node(kn));
+
+                }
             }
 
             line = null;
-            bufReader = new BufferedReader(new FileReader("Knihy.txt"));
-            while ((line = bufReader.readLine()) != null) {
+            f = new File("Archiv.txt");
+            if (f.exists()) {
+                bufReader = new BufferedReader(new FileReader(f));
+                while ((line = bufReader.readLine()) != null) {
 
-                String[] atr = line.split(regx);
+                    String[] atr = line.split(regx);
 
-                Kniha kn = new Kniha(atr);
-                //ak existuje pobocka priradim ju tam
-                if (atr.length > 10) {
-
-                    Pobocka pob = findPobocku(atr[10]);
-                    pob.addKnihu(kn);
-                    //ak ma vyplneny odda a doda tak hu pozicam
-                    if (kn.isPozicana()) {
-                        pob.getPozKnihy().insert(new Node(kn.getKnihaStr()));
-
-                        Citatel cit = findCitatel(getInt(atr[11]));
-                        cit.urobPozicku(kn);
+                    Kniha kn = findKnihuAll(getInt(atr[0]));
+                    Citatel ct = findCitatel(getInt(atr[1]));
+                    PozKniha pk = new PozKniha(atr, kn, ct);
+                    if (pk.getDays() > 0) {
+                        // ak som vratil neskoro tak
+                        ct.getOneskorenia().add(pk);
 
                     }
-                }
-                knihy.insert(new Node(kn));
+                    ct.getHistoria().add(pk);
 
+                    knihyArchiv.insert(new Node(pk));
+
+                }
             }
 
             line = null;
-            bufReader = new BufferedReader(new FileReader("Archiv.txt"));
-            while ((line = bufReader.readLine()) != null) {
-
-                String[] atr = line.split(regx);
-
-                Kniha kn = findKnihuAll(getInt(atr[0]));
-                Citatel ct = findCitatel(getInt(atr[1]));
-                PozKniha pk = new PozKniha(atr, kn, ct);
-                if (pk.getDays() > 0) {
-                    // ak som vratil neskoro tak
-                    ct.getOneskorenia().add(pk);
-
-                }
-                ct.getHistoria().add(pk);
-
-                knihyArchiv.insert(new Node(pk));
-
-            }
-
-            line = null;
-            bufReader = new BufferedReader(new FileReader("Setings.txt"));
+            f = new File("Setings.txt");
+            bufReader = new BufferedReader(new FileReader(f));
             while ((line = bufReader.readLine()) != null) {
 
                 String[] atr = line.split(regx);
                 knihaSeq = getInt(atr[0]);
                 citSeq = getInt(atr[1]);
                 knihArchSeq = getInt(atr[2]);
-                
+
             }
 
         } catch (IOException ex) {
@@ -549,10 +563,10 @@ public class Core {
      * @param citatel
      * @param calendar
      */
-    public void urobPozicku(String pobocka, String kniha, int citatel, Calendar calendar) {
+    public void urobPozicku(String pobocka, int kniha, int citatel, Calendar calendar) {
         /*treba dorobit osetrenie*/
 
-        if (pobocka.isEmpty() || kniha.isEmpty() || citatel < 1 || calendar == null) {
+        if (pobocka.isEmpty() || citatel < 1 || calendar == null) {
             setErrMsg("Nevyplnili ste niektorý z povinných údajov!");
             return;
         }

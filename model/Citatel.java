@@ -160,16 +160,18 @@ public class Citatel implements INode {
      */
     public boolean isBlocked(Calendar date) {
         boolean result = false;
-        Calendar od = dateBlocked;
-        if (od != null) {
+        Calendar od = Calendar.getInstance();
+        
+        if (dateBlocked != null) {
+            od.setTime(dateBlocked.getTime());
             od.add(Calendar.YEAR, 1);
             result = od.after(date);
             //ci je blokunuty a ci nahodou nema block na rok
-        } else {
-
+        
+        if(!result){
+            
             dateBlocked = null;
-
-        }
+        }}
         return result;
     }
 
@@ -248,8 +250,8 @@ public class Citatel implements INode {
                 root = root.getLeft();
             } else {
                 Node n = stack.pop();
-                KnihaStr knih = (KnihaStr) n.getData();
-                Calendar doda = knih.getKniha().getDoda();
+                Kniha knih = (Kniha) n.getData();
+                Calendar doda = knih.getDoda();
                 if (doda != null) {
 
                     if (doda.before(calendar)) {

@@ -121,8 +121,13 @@ public class Pobocka implements INode {
         }
 
         Node node = knihyInt.findNode(new Node(new Kniha(cis)));
-        Kniha kniha = (Kniha) node.getData();
-        return kniha;
+        if (node != null) {
+            Kniha kniha = (Kniha) node.getData();
+            return kniha;
+        }else{
+            return null;
+        }
+        
     }
 
     /**
@@ -241,8 +246,9 @@ public class Pobocka implements INode {
         kniha.setKnihaStr(null);
         kniha.setPobocka(null);
         knihyInt.remove(new Node(kniha));
-        knihaStr.setKniha(null);
+             
         knihyStr.remove(new Node(knihaStr));
+        knihaStr.setKniha(null);   
 
     }
 

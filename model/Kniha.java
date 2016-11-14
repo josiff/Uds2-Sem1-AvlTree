@@ -5,13 +5,11 @@
  */
 package model;
 
-import avltree.AvlTree;
 import avltree.INode;
-import avltree.Node;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import system.Setings;
@@ -66,7 +64,7 @@ public class Kniha implements INode {
             SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
             this.nazovKnihy = atr[0];
             this.autor = atr[1];
-            this.isbn = Integer.parseInt(atr[2]);
+            this.isbn = generujIsbn(); //Integer.parseInt(atr[2]);
             this.ean = Integer.parseInt(atr[3]);
             this.zaner = atr[4];
             this.id = Integer.parseInt(atr[5]);
@@ -256,5 +254,14 @@ public class Kniha implements INode {
     public void setKnihaStr(KnihaStr knihaStr) {
         this.knihaStr = knihaStr;
     }
+
+    
+    private int generujIsbn(){
+    
+        Random rnd = new Random();
+        return Math.abs(rnd.nextInt()*10);
+    
+    }
+    
 
 }

@@ -1204,7 +1204,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
             } else {
                 int citatel = Integer.parseInt(str);
 
-                core.urobPozicku(getPobocku(), getNazKnihy(), citatel, dateChooser.getCurrent());
+                core.urobPozicku(getPobocku(), getIdKnihy(), citatel, dateChooser.getCurrent());
 
                 refreshTabPobPoz();
             }
@@ -1393,6 +1393,29 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
 
             showErr("Nie je vybratá žiadna kniha");
             return "";
+
+        }
+
+    }
+    
+    /**
+     * Vrati nazov aktulane oznacenej knihy
+     *
+     * @return
+     */
+    public int getIdKnihy() {
+
+        int row = pobTabKnihy.getSelectedRow();
+
+        if (row > -1) {
+
+            int name = (int) modelKnihy.getValueAt(row, KnihaTableModel.id);
+            return name;
+
+        } else {
+
+            showErr("Nie je vybratá žiadna kniha");
+            return -1;
 
         }
 

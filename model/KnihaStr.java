@@ -16,14 +16,17 @@ public class KnihaStr implements INode {
 
     private Kniha kniha;
     private String nazov;
+    private int id;
 
     public KnihaStr(String nazov) {
         this.nazov = nazov;
+        this.id = -1;
     }
 
     public KnihaStr(Kniha kniha) {
         this.kniha = kniha;
         this.nazov = kniha.getNazovKnihy();
+        this.id = kniha.getId();
 
     }
 
@@ -32,6 +35,21 @@ public class KnihaStr implements INode {
         KnihaStr knih = (KnihaStr) paData;
 
         int cis = this.nazov.compareTo(knih.getNazov());
+
+        if (cis == 0 && id > -1) {
+
+            if (this.id < knih.getKniha().getId()) {
+
+                cis = -1;
+
+            } else if (this.id > knih.getKniha().getId()) {
+
+                cis = 1;
+            } else {
+                cis = 0;
+            }
+
+        }
 
         return cis;
 
