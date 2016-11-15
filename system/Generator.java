@@ -6,9 +6,6 @@
 package system;
 
 import avltree.Node;
-import com.sun.javafx.scene.control.skin.VirtualFlow;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import model.Pobocka;
 
@@ -39,29 +36,22 @@ public class Generator {
 
             for (int j = 0; j < pocKnih; j++) {
                 ct.addKnihu(randomString(CHAR_LENGTH), randomString(CHAR_LENGTH),
-                        generIsbn(), generIsbn(), randomString(CHAR_LENGTH), pob);
+                        generujIsbn(), generEan(), randomString(CHAR_LENGTH), pob);
             }
 
         }
-        
-        
-       /* Pobocka pb = new Pobocka("Bolesov");
-        ct.getPobocky().insert(new Node(pb));
-        ct.addKnihu("Trubicka", "a", 0, 1, "ee", pb);
-        ct.addKnihu("Azbest", "a", 0, 1, "ee", pb);
-        ct.addKnihu("Notebuk", "a", 0, 1, "ee", pb);
-        ct.addKnihu("Televizok", "a", 0, 1, "ee", pb);
-        ct.addKnihu("Janko", "a", 0, 1, "ee", pb);
-        ct.addKnihu("Marienka", "a", 0, 1, "ee", pb);
-        ct.addKnihu("Iphone", "a", 0, 1, "ee", pb);
-        ct.addKnihu("Guru", "a", 0, 1, "ee", pb);
-        ct.addKnihu("Pero", "a", 0, 1, "ee", pb);*/
-        
-        
-        
-        
-        
 
+        /* Pobocka pb = new Pobocka("Bolesov");
+         ct.getPobocky().insert(new Node(pb));
+         ct.addKnihu("Trubicka", "a", 0, 1, "ee", pb);
+         ct.addKnihu("Azbest", "a", 0, 1, "ee", pb);
+         ct.addKnihu("Notebuk", "a", 0, 1, "ee", pb);
+         ct.addKnihu("Televizok", "a", 0, 1, "ee", pb);
+         ct.addKnihu("Janko", "a", 0, 1, "ee", pb);
+         ct.addKnihu("Marienka", "a", 0, 1, "ee", pb);
+         ct.addKnihu("Iphone", "a", 0, 1, "ee", pb);
+         ct.addKnihu("Guru", "a", 0, 1, "ee", pb);
+         ct.addKnihu("Pero", "a", 0, 1, "ee", pb);*/
         for (int i = 0; i < pocCit; i++) {
             ct.addCitatela(randomString(CHAR_LENGTH), randomString(CHAR_LENGTH));
         }
@@ -77,14 +67,41 @@ public class Generator {
         return sb.toString();
     }
 
-    /**
-     * Generovanie isbn kodu
-     *
-     * @return
-     */
-    public int generIsbn() {
+    public static String generujIsbn() {
 
-        return 0;
+        int[] d = new int[10];
+        int isbn = rndCis(100000000, 999999999);
+        d[0] = isbn / 100000000;
+        d[1] = (isbn % 100000000) / 10000000;
+        d[2] = (isbn % 10000000) / 1000000;
+        d[3] = (isbn % 1000000) / 100000;
+        d[4] = (isbn % 100000) / 10000;
+        d[5] = (isbn % 10000) / 1000;
+        d[6] = (isbn % 1000) / 100;
+        d[7] = (isbn % 100) / 10;
+        d[8] = (isbn % 10);
+
+        for (int i = 0; i < 9; i++) {
+            d[9] += d[i] * i + 1;
+        }
+        d[9] %= 11;
+
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < 9; i++) {
+            res.append(d[i]);
+        }
+        if (d[9] == 10) {
+            res.append('X');
+        } else {
+            res.append(d[9]);
+        }
+        return res.toString();
+
+    }
+
+    public static int rndCis(int min, int max) {
+        Random rnd = new Random();
+        return rnd.nextInt(max - min) + min;
 
     }
 
@@ -93,9 +110,9 @@ public class Generator {
      *
      * @return
      */
-    public int generEan() {
+    public static int generEan() {
 
-        return 1;
+       return rndCis(100000000,999999999);
 
     }
 

@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import system.Generator;
 import system.Setings;
 import system.Store;
 
@@ -25,7 +26,7 @@ public class Kniha implements INode {
 
     private String autor;
     private String nazovKnihy;
-    private int isbn;
+    private String isbn;
     private int ean;
     private String zaner;
     private Pobocka pobocka;
@@ -39,7 +40,7 @@ public class Kniha implements INode {
 
     public Kniha(String nazovKnihy,
             String autor,
-            int isbn,
+            String isbn,
             int ean,
             String zaner,
             int id) {
@@ -64,7 +65,7 @@ public class Kniha implements INode {
             SimpleDateFormat df = new SimpleDateFormat("dd.MM.yyyy hh:mm:ss");
             this.nazovKnihy = atr[0];
             this.autor = atr[1];
-            this.isbn = generujIsbn(); //Integer.parseInt(atr[2]);
+            this.isbn = (atr[2]); //Generator.generujIsbn();
             this.ean = Integer.parseInt(atr[3]);
             this.zaner = atr[4];
             this.id = Integer.parseInt(atr[5]);
@@ -104,11 +105,11 @@ public class Kniha implements INode {
         this.nazovKnihy = nazovKnihy;
     }
 
-    public int getIsbn() {
+    public String getIsbn() {
         return isbn;
     }
 
-    public void setIsbn(int isbn) {
+    public void setIsbn(String isbn) {
         this.isbn = isbn;
     }
 
@@ -255,13 +256,6 @@ public class Kniha implements INode {
         this.knihaStr = knihaStr;
     }
 
-    
-    private int generujIsbn(){
-    
-        Random rnd = new Random();
-        return Math.abs(rnd.nextInt()*10);
-    
-    }
     
 
 }

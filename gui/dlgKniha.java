@@ -176,7 +176,7 @@ public class dlgKniha extends javax.swing.JDialog {
         result = true;
         core.addKnihu(txtNazov.getText(),
                 txtAutor.getText(),
-                Integer.valueOf(txtISBN.getText()),
+                txtISBN.getText(),
                 Integer.valueOf(txtEAN.getText()),
                 txtZaner.getText(),
                 pobocka);

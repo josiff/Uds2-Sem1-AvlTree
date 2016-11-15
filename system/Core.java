@@ -156,14 +156,14 @@ public class Core {
 
     }
 
-    public boolean addKnihu(String nazov, String autor, int isbn, int ean,
+    public boolean addKnihu(String nazov, String autor, String isbn, int ean,
             String zaner, String pobocka) {
 
         return addKnihu(nazov, autor, isbn, ean, zaner, findPobocku(pobocka));
 
     }
 
-    public boolean addKnihu(String nazov, String autor, int isbn, int ean,
+    public boolean addKnihu(String nazov, String autor, String isbn, int ean,
             String zaner, Pobocka pob) {
 
         if (pob == null) {
