@@ -8,15 +8,11 @@ package model;
 import avltree.AvlTree;
 import avltree.INode;
 import avltree.Node;
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -180,7 +176,7 @@ public class Citatel implements INode {
         
         if (dateBlocked != null) {
             od.setTime(dateBlocked.getTime());
-            od.add(Calendar.YEAR, 1);
+           // od.add(Calendar.YEAR, 1);
             result = od.after(date);
             //ci je blokunuty a ci nahodou nema block na rok
         

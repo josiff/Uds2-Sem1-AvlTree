@@ -1374,6 +1374,7 @@ public class BaseForm extends javax.swing.JFrame implements IMessage {
         if (nazov != null) {
 
             core.vratKnihu(getIdCitatela(), getIdCitAkPoz() , nazov, dateChooser.getCurrent());
+            refreshTabKniha();
         }
     }//GEN-LAST:event_jButton10ActionPerformed
 

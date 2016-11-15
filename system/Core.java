@@ -117,6 +117,10 @@ public class Core {
             return null;
         }
         Node node = pobocky.findNode(new Node(new Pobocka(nazov)));
+        if(node == null){
+        
+            return null;
+        }
         return (Pobocka) node.getData();
 
     }
