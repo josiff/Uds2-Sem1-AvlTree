@@ -1021,6 +1021,12 @@ public class Core {
             setErrMsg("Kniha " + id + " sa nenašla");
             return;
         }
+        
+        if(kn.getPobocka() == null){
+        
+            setErrMsg("Kniha je už vymazaná!");
+            return;
+        }
 
         if (kn.isPozicana()) {
 
